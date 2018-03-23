@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane fx:id="rootPane" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RestarantApp.menuClass.ItemListController">
+    <children>
+        <AnchorPane prefHeight="418.0" prefWidth="580.0">
+            <children>
+                <TableView fx:id="tableIndex" layoutX="-3.0" prefHeight="418.0" prefWidth="589.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-3.0" AnchorPane.rightAnchor="-6.0" AnchorPane.topAnchor="0.0">
+                    <columns>
+                        <TableColumn fx:id="itemIdColm" editable="false" prefWidth="50.0" sortable="false" text="ID">
+                            <cellValueFactory><PropertyValueFactory property="itemShortCode" />
+                            </cellValueFactory>
+
+                        </TableColumn>
+                        <TableColumn fx:id="itemNameColm" editable="false" prefWidth="100" sortable="false" text="Name">
+                            <cellValueFactory><PropertyValueFactory property="itemName" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="itemDesColm" editable="false" prefWidth="100" sortable="false" text="Description">
+                            <cellValueFactory><PropertyValueFactory property="itemDescription" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="itemPricecolm" editable="false" prefWidth="50" sortable="false" text="Price">
+                            <cellValueFactory><PropertyValueFactory property="itemPrice" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="itemCatListcolm" editable="false" prefWidth="97.0" sortable="false" text="Category List">
+                            <cellValueFactory><PropertyValueFactory property="itemCategoryList" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="itemImagecolm" editable="false" prefWidth="153.0" sortable="false" text="Image">
+                            <cellValueFactory><PropertyValueFactory property="itemImage" />
+                            </cellValueFactory>
+                        </TableColumn>
+
+                    </columns>
+                </TableView>
+                <ImageView fx:id="imgNext" fitHeight="44.0" fitWidth="39.0" layoutX="255.0" layoutY="349.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="25.0">
+                    <image>
+                        <Image url="@../images/next.png" />
+                    </image>
+                </ImageView>
+                <ImageView fx:id="imgPrevious" fitHeight="44.0" fitWidth="39.0" layoutX="213.0" layoutY="369.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="328.0">
+                    <image>
+                        <Image url="@../images/previous.png" />
+                    </image>
+                </ImageView>
+            </children>
+        </AnchorPane>
+    </children>
+</StackPane>

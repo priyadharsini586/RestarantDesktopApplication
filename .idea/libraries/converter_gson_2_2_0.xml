@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="converter-gson-2.2.0">
+    <CLASSES>
+      <root url="jar://D:/resturant library/retrofit/converter-gson-2.2.0.jar!/" />
+      <root url="jar://D:/resturant library/retrofit/gson-2.7.jar!/" />
+      <root url="jar://D:/resturant library/retrofit/okhttp-3.6.0.jar!/" />
+      <root url="jar://D:/resturant library/retrofit/okio-1.11.0.jar!/" />
+      <root url="jar://D:/resturant library/retrofit/retrofit-2.2.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
