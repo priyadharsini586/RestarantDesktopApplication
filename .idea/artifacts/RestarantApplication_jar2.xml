@@ -1,0 +1,25 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="RestarantApplication:jar2">
+    <output-path>$PROJECT_DIR$/out/artifacts/RestarantApplication_jar2</output-path>
+    <root id="archive" name="RestarantApplication.jar">
+      <element id="module-output" name="RestarantApplication" />
+      <element id="extracted-dir" path="D:/resturant library/slf4j-simple-1.7.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/resturant library/jfoenix-8.0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/resturant library/httpclient-4.2.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/resturant library/httpclient-4.3-beta1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/resturant library/retrofit/converter-gson-2.2.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/resturant library/retrofit/gson-2.7.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/resturant library/retrofit/okhttp-3.6.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/resturant library/retrofit/okio-1.11.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/resturant library/retrofit/retrofit-2.2.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/resturant library/controlsfx-8.40.12.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/resturant library/slf4j-api-1.7.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/resturant library/httpcore-4.2.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/resturant library/json-simple-1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/resturant library/gson-2.6.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/resturant library/amqp-client-5.1.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/resturant library/org.json.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/resturant library/retrofit-2.3.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
