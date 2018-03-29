@@ -68,11 +68,20 @@ public class LoginController {
         Stage stage;
         Parent root;
         stage=(Stage) btnLogin.getScene().getWindow();
-        root = FXMLLoader.load(getClass().getResource("/RestarantApp/Dashboard/DashBoardScene.fxml"));
+        root = FXMLLoader.load(getClass().getResource("/RestarantApp/Billing/billingscene.fxml"));
         stage.setTitle("Prawn And Crabs");
         Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
         stage.setScene(new Scene(root, visualBounds.getWidth(), visualBounds.getHeight()));
         stage.show();
+
+       /* Stage stage;
+        Parent root;
+        stage=(Stage) btnLogin.getScene().getWindow();
+        root = FXMLLoader.load(getClass().getResource("/RestarantApp/Dashboard/DashBoardScene.fxml"));
+        stage.setTitle("Prawn And Crabs");
+        Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
+        stage.setScene(new Scene(root, visualBounds.getWidth(), visualBounds.getHeight()));
+        stage.show();*/
 
         /*FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/RestarantApp/Dashboard/DashBoardScene.fxml"));
         Parent root1 = (Parent) fxmlLoader.load();

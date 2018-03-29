@@ -75,6 +75,22 @@
 {
     -fx-background-color:WHITE;
     -fx-text-fill: red;
+}
+.dashboard{
+    -fx-background-image:url("../images/backgroun-bg.jpg");
+    -fx-background-position:center;
+    -fx-background-size:cover;
+    -fx-background-attachment:fixed;
+}
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-color:  #f58220;
+    -fx-border-width: 1;
+    -fx-background-insets: 0;
 
+}
 
+.autofill-text{
+    -fx-skin:"np.com.ngopal.control.AutoFillTextBoxSkin";
 }

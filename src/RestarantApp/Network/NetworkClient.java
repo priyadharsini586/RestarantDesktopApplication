@@ -29,7 +29,7 @@ public class NetworkClient {
             if (finalJsonObject != null) {
                 String converStr = "x=" + finalJsonObject.toString();
 //               url = new URL("https://prawnandcrab.com/webservice/"+requestUrl +converStr);
-                url = new URL("http://192.168.1.3/prawnandcrab/webservice/"+requestUrl +converStr);
+                    url = new URL("http://192.168.1.3/prawnandcrab/webservice/"+requestUrl +converStr);
             }else
             {
 //                url = new URL("https://prawnandcrab.com/webservice/"+requestUrl);

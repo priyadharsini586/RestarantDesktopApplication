@@ -83,4 +83,19 @@ public interface APIService {
     @POST("combo_edit.php")
     Call<RequestAndResponseModel> editCombo(@Field("x") JSONObject object);
 
+    @FormUrlEncoded
+    @POST("table_add.php")
+    Call<RequestAndResponseModel> addTable(@Field("x") JSONObject object);
+
+    @POST("table_list.php")
+    Call<ItemListRequestAndResponseModel> getTableList();
+
+    @FormUrlEncoded
+    @POST("table_delete.php")
+    Call<RequestAndResponseModel> deleteTable(@Field("x") JSONObject object);
+
+    @FormUrlEncoded
+    @POST("table_edit.php")
+    Call<RequestAndResponseModel> updateTable(@Field("x") JSONObject object);
+
 }

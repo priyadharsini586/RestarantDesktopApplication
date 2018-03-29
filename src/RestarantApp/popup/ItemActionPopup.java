@@ -247,6 +247,7 @@ public class ItemActionPopup implements Initializable {
                     RequestAndResponseModel requestAndResponseModel = response.body();
                     if (requestAndResponseModel.getSuccessCode().equals(Constants.Success)) {
                         cat_listArrayList = requestAndResponseModel.getCat_list();
+                        System.out.println(requestAndResponseModel.getSuccessMessage());
                        /* Stage stage = (Stage) btnSubmitItem.getScene().getWindow();
                         stage.close();*/
                         Platform.runLater(new Runnable() {

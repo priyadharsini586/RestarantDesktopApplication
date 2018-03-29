@@ -259,7 +259,7 @@ public class ItemListController {
             @Override
             public void handle(MouseEvent event) {
                 ItemListRequestAndResponseModel item = tableIndex.getSelectionModel().getSelectedItem();
-
+                System.out.println(Constants.ITEM_BASE_URL + item.getItemImage());
                 Parent root;
                 try {
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/RestarantApp/popup/item_popup.fxml"));
@@ -286,6 +286,9 @@ public class ItemListController {
                 }*/
             }
         });
+
+
+
     }
 
   /*  public void btnUploadEditAction(ActionEvent actionEvent) {

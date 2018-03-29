@@ -37,7 +37,7 @@ public class DashBoardController  {
     AnchorPane subCategory,rootPane;
     String root = "Root",monthly_report ="Monthly Report",category ="Category",item = "Items",add_category = "Add Category",view_category ="View Category"
             ,add_Item ="Add Item",list_item = "List Item",tax = "Tax",add_tax = "Add Tax",list_tax = "List Tax",combo = " Combo Items",add_combo = "Add Combo Items",
-            combo_item = "Combo Details";
+            combo_item = "Combo Details",table="Table",add_table="Add Table",list_table = "List Table";
 
 
     public void initialize() {
@@ -49,7 +49,8 @@ public class DashBoardController  {
         TreeItem<String> itemNode = new TreeItem<>(item);
         TreeItem<String> taxNode = new TreeItem<>(tax);
         TreeItem<String> comboNode = new TreeItem<>(combo);
-        treeItemRoot.getChildren().addAll(monthlyNode, categoryNode, itemNode,taxNode,comboNode);
+        TreeItem<String> tableNode = new TreeItem<>(table);
+        treeItemRoot.getChildren().addAll(monthlyNode, categoryNode, itemNode,taxNode,comboNode,tableNode);
 
         TreeItem<String> nodeItemA1 = new TreeItem<>(add_category);
         TreeItem<String> nodeItemA2 = new TreeItem<>(view_category);
@@ -66,6 +67,10 @@ public class DashBoardController  {
         TreeItem<String> addCombo = new TreeItem<>(add_combo);
         TreeItem<String> comboDetails = new TreeItem<>(combo_item);
         comboNode.getChildren().addAll(addCombo,comboDetails);
+
+        TreeItem<String> addTable = new TreeItem<>(add_table);
+        TreeItem<String> tableList = new TreeItem<>(list_table);
+        tableNode.getChildren().addAll(addTable,tableList);
 
         treeItemRoot.setExpanded(true);
         lstMenu.setShowRoot(false);
@@ -103,6 +108,12 @@ public class DashBoardController  {
                 }else if (selectedItem.getValue().equals(combo_item))
                 {
                     changePane("/RestarantApp/menuFxml/combo_list_scene.fxml");
+                }else if (selectedItem.getValue().equals(add_table))
+                {
+                    changePane("/RestarantApp/menuFxml/add_table_scene.fxml");
+                }else if (selectedItem.getValue().equals(list_table))
+                {
+                    changePane("/RestarantApp/menuFxml/table_list_scene.fxml");
                 }
             }
         });
