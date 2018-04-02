@@ -157,7 +157,7 @@ public class BillingController implements Initializable, ItemSelectedListener  {
         );
         colAmount.setPrefWidth( 120 );
 
-       
+
         tableBill.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
         tableBill.getStylesheets().add("/RestarantApp/cssFile/Login.css");
         tableBill.setFixedCellSize(35);
