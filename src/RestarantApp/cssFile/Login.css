@@ -33,8 +33,9 @@
 }
 .table-row-cell .text {
     -fx-fill: black ;
-    -fx-font-size: 13;
+    -fx-font-size: 15;
     -fx-alignment: center;
+    -fx-font-weight: bold;
 }
 
 .table-row-cell:empty .table-cell {

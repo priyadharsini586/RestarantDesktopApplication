@@ -90,6 +90,16 @@ public class ItemController {
             }
         });
 
+        txtItemId.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    txtItemId.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+
     }
 
 

@@ -138,7 +138,10 @@
                      </font>
                   </Label>
                   <TextField layoutX="165.0" layoutY="300.0" prefHeight="25.0" prefWidth="127.0" />
-                  <TextField layoutX="165.0" layoutY="4.0" prefHeight="25.0" prefWidth="127.0" />
+                  <TextField fx:id="txtTotalAmount" editable="false" layoutX="165.0" layoutY="4.0" prefHeight="25.0" prefWidth="127.0" text="0.0">
+                     <font>
+                        <Font name="Times New Roman Bold" size="13.0" />
+                     </font></TextField>
                   <TextField layoutX="165.0" layoutY="47.0" prefHeight="25.0" prefWidth="127.0" />
                   <TextField layoutX="166.0" layoutY="86.0" prefHeight="25.0" prefWidth="127.0" />
                   <TextField layoutX="166.0" layoutY="126.0" prefHeight="25.0" prefWidth="127.0" />
@@ -180,8 +183,14 @@
                   <Font name="Times New Roman Bold" size="14.0" />
                </font>
             </Label>
-            <AutoCompleteTextField fx:id="txtFieldId" layoutX="66.0" layoutY="13.0" prefHeight="26.0" prefWidth="87.0" style="-fx-background-radius: 0px; -fx-background-color: white;" />
-            <TextField layoutX="525.0" layoutY="14.0" prefHeight="26.0" prefWidth="39.0" style="-fx-background-color: white; -fx-background-radius: none;" />
+            <AutoCompleteTextField fx:id="txtFieldId" layoutX="66.0" layoutY="13.0" prefHeight="26.0" prefWidth="87.0" style="-fx-background-radius: 0px; -fx-background-color: white;">
+               <font>
+                  <Font name="Times New Roman Bold" size="13.0" />
+               </font></AutoCompleteTextField>
+            <TextField fx:id="txtQty" layoutX="525.0" layoutY="14.0" prefHeight="26.0" prefWidth="39.0" style="-fx-background-color: white; -fx-background-radius: none;">
+               <font>
+                  <Font name="Times New Roman Bold" size="13.0" />
+               </font></TextField>
             <Label layoutX="481.0" layoutY="20.0" text="Qnty :" textFill="WHITE">
                <font>
                   <Font name="Times New Roman Bold" size="14.0" />
@@ -207,7 +216,10 @@
                   <Font name="Times New Roman Bold" size="14.0" />
                </font>
             </Label>
-            <AutoCompleteTextField fx:id="txtFieldName" layoutX="274.0" layoutY="15.0" onKeyPressed="#textFiledNamePressed" prefHeight="26.0" prefWidth="167.0" style="-fx-background-color: white; -fx-background-radius: none;" />
+            <AutoCompleteTextField fx:id="txtFieldName" layoutX="274.0" layoutY="15.0" onKeyPressed="#textFiledNamePressed" prefHeight="26.0" prefWidth="167.0" style="-fx-background-color: white; -fx-background-radius: none;">
+               <font>
+                  <Font name="Times New Roman Bold" size="13.0" />
+               </font></AutoCompleteTextField>
             <ImageView fitHeight="26.0" fitWidth="37.0" layoutX="443.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/searchicon.png" />

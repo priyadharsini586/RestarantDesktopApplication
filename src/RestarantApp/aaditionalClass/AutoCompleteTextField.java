@@ -1,6 +1,7 @@
 package RestarantApp.aaditionalClass;
 
 import RestarantApp.Billing.BillingController;
+import RestarantApp.Billing.ItemSelectedListener;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -25,12 +26,15 @@ import java.util.*;
 public class AutoCompleteTextField extends TextField
 {
     /** The existing autocomplete entries. */
-    private final SortedSet<String> entries;
+    private SortedSet<String> entries = null;
     /** The popup used to select an entry. */
     private ContextMenu entriesPopup;
     /** Construct a new AutoCompleteTextField. */
-
-    private ItemSelectedListener itemSelectedListener;
+    public static ItemSelectedListener itemSelectedListener;
+    public AutoCompleteTextField(ItemSelectedListener itemSelectListener)
+    {
+       this.itemSelectedListener = itemSelectListener;
+    }
 
     public AutoCompleteTextField() {
         super();
@@ -88,7 +92,10 @@ public class AutoCompleteTextField extends TextField
     }
 
 
-
+    public void hidePopUp()
+    {
+        entriesPopup.hide();
+    }
     /**
      * Get the existing set of autocomplete entries.
      * @return The existing autocomplete entries.
@@ -117,7 +124,7 @@ public class AutoCompleteTextField extends TextField
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     setText(result);
-                    selectedTextFromMenu(result);
+                    itemSelectedListener.getSelectedResult(result);
                     entriesPopup.hide();
                 }
             });
@@ -129,13 +136,7 @@ public class AutoCompleteTextField extends TextField
 
     }
 
-    private void selectedTextFromMenu(String result) {
 
-        AutoCompleteTextField autoCompleteTextField = new AutoCompleteTextField();
-        ItemSelectedListener mListener = new BillingController();
-        autoCompleteTextField.registerOnGeekEventListener(mListener);
-        autoCompleteTextField.selectItemListener(result);
-    }
 
 
 
@@ -156,23 +157,5 @@ public class AutoCompleteTextField extends TextField
         return new TextFlow(textBefore, textFilter, textAfter);
     }
 
-    public interface ItemSelectedListener
-    {
-         void getSelectedResult(String result);
-    }
-    public void registerOnGeekEventListener(ItemSelectedListener mListener)
-    {
-        this.itemSelectedListener = mListener;
-    }
-
-
-    public void selectItemListener(String result)
-    {
-
-        if (this.itemSelectedListener != null) {
-
-            itemSelectedListener.getSelectedResult(result);
-        }
-    }
 
 }
