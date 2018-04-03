@@ -142,8 +142,8 @@
                      <font>
                         <Font name="Times New Roman Bold" size="13.0" />
                      </font></TextField>
-                  <TextField layoutX="165.0" layoutY="47.0" prefHeight="25.0" prefWidth="127.0" />
-                  <TextField layoutX="166.0" layoutY="86.0" prefHeight="25.0" prefWidth="127.0" />
+                  <TextField fx:id="txtFiledDiscountAmount" layoutX="165.0" layoutY="47.0" prefHeight="25.0" prefWidth="127.0" />
+                  <TextField fx:id="txtFileldGross" layoutX="166.0" layoutY="86.0" prefHeight="25.0" prefWidth="127.0" />
                   <TextField layoutX="166.0" layoutY="126.0" prefHeight="25.0" prefWidth="127.0" />
                   <TextField layoutX="165.0" layoutY="170.0" prefHeight="25.0" prefWidth="127.0" />
                   <TextField layoutX="165.0" layoutY="213.0" prefHeight="25.0" prefWidth="127.0" />
@@ -154,7 +154,7 @@
                         <Font name="Times New Roman Bold" size="17.0" />
                      </font>
                   </Label>
-                  <TextField layoutX="92.0" layoutY="47.0" prefHeight="25.0" prefWidth="47.0" />
+                  <TextField fx:id="txtFiledDiscount" layoutX="92.0" layoutY="47.0" prefHeight="25.0" prefWidth="47.0" />
                   <Label layoutX="138.0" layoutY="52.0" text="\%" textFill="WHITE">
                      <font>
                         <Font name="Times New Roman Bold" size="18.0" />

@@ -9,8 +9,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
 
     public static Retrofit retrofit = null;
-//    public static final String BASE_URL = "https://prawnandcrab.com/webservice/";
-public static final String BASE_URL = "http://192.168.1.4/prawnandcrab/webservice/";
+    public static final String BASE_URL = "https://prawnandcrab.com/webservice/";
+//public static final String BASE_URL = "http://192.168.1.3/prawnandcrab/webservice/";
 
     public static Retrofit getClient()
     {

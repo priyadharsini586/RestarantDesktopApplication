@@ -44,6 +44,8 @@ public class EditingCell extends TableCell<BillingModel, String> {
         setText((String) getItem());
         setContentDisplay(ContentDisplay.TEXT_ONLY);
     }
+
+
     @Override
     public void updateItem(String item, boolean empty) {
         super.updateItem(item, empty);
@@ -63,13 +65,30 @@ public class EditingCell extends TableCell<BillingModel, String> {
             }
         }
     }
+
+
     private void createTextField() {
         textField = new TextField(getString());
         textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
+        textField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*") ) {
+
+                    textField.setText(newValue.replaceAll("[^\\d]", ""));
+
+                }
+            }
+        });
+
         textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent t) {
                 if (t.getCode() == KeyCode.ENTER) {
+                    int index = getTableRow().getIndex();
+                    BillingModel billingModel = getTableView().getItems().get(index);
+                    billingModel.setQuantity(textField.getText());
                     commitEdit(textField.getText());
                 } else if (t.getCode() == KeyCode.ESCAPE) {
                     cancelEdit();
@@ -139,4 +158,6 @@ public class EditingCell extends TableCell<BillingModel, String> {
             return columns;
         }
     }
+
+
 }

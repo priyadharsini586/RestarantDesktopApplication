@@ -4,47 +4,33 @@ import RestarantApp.Network.APIService;
 import RestarantApp.Network.RetrofitClient;
 import RestarantApp.aaditionalClass.AutoCompleteTextField;
 import RestarantApp.aaditionalClass.EditingCell;
-import RestarantApp.menuClass.AddTaxController;
 import RestarantApp.menuClass.ViewCategoryController;
 import RestarantApp.model.ItemListRequestAndResponseModel;
 import RestarantApp.model.RequestAndResponseModel;
-import RestarantApp.popup.ItemActionPopup;
-import impl.org.controlsfx.autocompletion.SuggestionProvider;
-import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.util.converter.IntegerStringConverter;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
+
 import java.net.URL;
 import java.util.*;
 
@@ -71,11 +57,13 @@ public class BillingController implements Initializable, ItemSelectedListener  {
     @FXML
     TableColumn colSno,colItem,colQty,colRate,colAmount;
     @FXML
-    TextField txtQty,txtTotalAmount;
+    TextField txtQty,txtTotalAmount,txtFiledDiscount,txtFiledDiscountAmount,txtFileldGross;
     ObservableList<BillingModel> modelObservableList = FXCollections.observableArrayList();
     ItemListRequestAndResponseModel.item_list selectedItem;
     double subTotal;
     int serialNo = 1;
+    ArrayList<Integer> itemIdList = new ArrayList<>();
+    HashMap<Integer,String> getTaxListDetails = new HashMap<>();
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         itemLoadProgres.setVisible(false);
@@ -87,6 +75,7 @@ public class BillingController implements Initializable, ItemSelectedListener  {
         setTableDetails();
 
         getData();
+        taxList();
 //
 
         autoCompleteTextField = new AutoCompleteTextField(this);
@@ -99,7 +88,7 @@ public class BillingController implements Initializable, ItemSelectedListener  {
 
                     txtQty.setText(newValue.replaceAll("[^\\d]", ""));
 
-                }else if ( !newValue.matches("[1-9]*"))
+                }else if ( !newValue.matches("^([1-9][0-9]{0,2}|1000)$"))
                 {
                     txtQty.setText("1");
                 }
@@ -119,6 +108,37 @@ public class BillingController implements Initializable, ItemSelectedListener  {
         });
 
         txtQty.setText("1");
+
+
+        txtFiledDiscount.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!txtTotalAmount.getText().equals("0.0"))
+                {
+                    System.out.println(newValue);
+                    double totalAmount = Double.valueOf(txtTotalAmount.getText());
+                    double getValue = Double.valueOf(newValue);
+                    getValue = getValue/100;
+                    getValue = getValue*totalAmount;
+                    txtFiledDiscountAmount.setText(String.valueOf(getValue));
+                    txtFileldGross.setText(String.valueOf(totalAmount - getValue));
+                }
+            }
+        });
+
+        txtFiledDiscountAmount.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!txtTotalAmount.getText().equals("0.0"))
+                {
+                    double totalAmount = Double.valueOf(txtTotalAmount.getText());
+                    double getValue = Double.valueOf(newValue);
+                    txtFiledDiscount.setText("");
+                    if (!newValue.isEmpty())
+                        txtFileldGross.setText(String.valueOf(totalAmount - getValue));
+                }
+            }
+        });
     }
 
 
@@ -148,6 +168,22 @@ public class BillingController implements Initializable, ItemSelectedListener  {
                 };
         colQty.setCellFactory(cellFactory);
 
+        colQty.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent event) {
+
+                BillingModel billingModel = modelObservableList.get(event.getTablePosition().getRow());
+                double amt = Double.valueOf(billingModel.getQuantity());
+                double price = Double.valueOf(billingModel.getRate());
+                amt = amt * price ;
+                String amount = String.valueOf(amt);
+                billingModel.setAmount(amount);
+                modelObservableList.set(event.getTablePosition().getRow(),billingModel);
+                setSubTotal();
+            }
+        });
+
+
         colRate.setCellValueFactory(
                 new PropertyValueFactory<BillingModel,String>("rate")
         );
@@ -155,7 +191,13 @@ public class BillingController implements Initializable, ItemSelectedListener  {
         colAmount.setCellValueFactory(
                 new PropertyValueFactory<BillingModel,String>("amount")
         );
+
         colAmount.setPrefWidth( 120 );
+
+
+
+
+
 
 
         tableBill.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
@@ -285,25 +327,131 @@ public class BillingController implements Initializable, ItemSelectedListener  {
 
         if (selectedItem != null)
         {
-            double amt = Double.valueOf(txtQty.getText());
-            double price = Double.valueOf(selectedItem.getPrice());
-            amt = amt * price ;
-            subTotal = subTotal + amt;
-            String amount = String.valueOf(amt);
-            BillingModel billingModel = new BillingModel(serialNo,selectedItem.getItem_name(),txtQty.getText(),selectedItem.getPrice(),amount);
-            modelObservableList.add(billingModel);
-            tableBill.setItems(modelObservableList);
-            String subtotal = String.valueOf(subTotal);
-            System.out.println(subtotal);
-            txtTotalAmount.setText(subtotal);
+
+            if (itemIdList.size() != 0)
+            {
+                int itemId = Integer.parseInt(selectedItem.getShort_code());
+                System.out.println(itemId);
+                if (itemIdList.contains(itemId))
+                {
+                    System.out.println("yes");
+                    for (int j=0 ; j <modelObservableList.size() ;j++) {
+                        BillingModel billingModelList = modelObservableList.get(j);
+                        if (billingModelList.getItem_id().equals(selectedItem.getShort_code())) {
+                            int alreadyValue = Integer.parseInt(billingModelList.getQuantity());
+                            int newQty = Integer.parseInt(txtQty.getText());
+                            newQty = newQty + alreadyValue;
+                            double amt = Double.valueOf(newQty);
+                            double price = Double.valueOf(selectedItem.getPrice());
+                            amt = amt * price;
+                            String amount = String.valueOf(amt);
+                            serialNo = billingModelList.getS_no();
+                            BillingModel billingModel = new BillingModel(serialNo, selectedItem.getItem_name(), String.valueOf(newQty), selectedItem.getPrice(), amount, selectedItem.getShort_code());
+                            modelObservableList.set(j, billingModel);
+                            setSubTotal();
+                        }
+                    }
+                }else
+                {
+                    double amt = Double.valueOf(txtQty.getText());
+                    double price = Double.valueOf(selectedItem.getPrice());
+                    amt = amt * price;
+                    String amount = String.valueOf(amt);
+                    BillingModel billingModel = new BillingModel(serialNo, selectedItem.getItem_name(), txtQty.getText(), selectedItem.getPrice(), amount, selectedItem.getShort_code());
+                    modelObservableList.add(billingModel);
+                    tableBill.setItems(modelObservableList);
+                    itemIdList.add(Integer.parseInt(selectedItem.getShort_code()));
+                    setSubTotal();
+                }
+            }else {
+                double amt = Double.valueOf(txtQty.getText());
+                double price = Double.valueOf(selectedItem.getPrice());
+                amt = amt * price;
+                String amount = String.valueOf(amt);
+                BillingModel billingModel = new BillingModel(serialNo, selectedItem.getItem_name(), txtQty.getText(), selectedItem.getPrice(), amount, selectedItem.getShort_code());
+                modelObservableList.add(billingModel);
+                tableBill.setItems(modelObservableList);
+                itemIdList.add(Integer.parseInt(selectedItem.getShort_code()));
+                setSubTotal();
+            }
+
+            txtFieldId.clear();
+            txtFieldName.clear();
+
+
+           /* if (modelObservableList.size() != 0) {
+                for (int j = 0; j < modelObservableList.size(); j++) {
+                    BillingModel billingModelList = modelObservableList.get(j);
+                    System.out.println("shor code--->"+modelObservableList.size());
+                    if (billingModelList.getItem_id().equals(selectedItem.getShort_code())) {
+
+                        int alreadyValue = Integer.parseInt(billingModelList.getQuantity());
+                        int newQty = Integer.parseInt(txtQty.getText());
+                        newQty = newQty + alreadyValue;
+                        double amt = Double.valueOf(newQty);
+                        double price = Double.valueOf(selectedItem.getPrice());
+                        amt = amt * price;
+                        String amount = String.valueOf(amt);
+                        serialNo = billingModelList.getS_no();
+                        BillingModel billingModel = new BillingModel(serialNo, selectedItem.getItem_name(),String.valueOf(newQty), selectedItem.getPrice(), amount, selectedItem.getShort_code());
+                        modelObservableList.set(j,billingModel);
+                        setSubTotal();
+//                        tableBill.setItems(modelObservableList);
+                    }else
+                    {
+                        double amt = Double.valueOf(txtQty.getText());
+                        double price = Double.valueOf(selectedItem.getPrice());
+                        amt = amt * price;
+                        String amount = String.valueOf(amt);
+                        BillingModel billingModel = new BillingModel(serialNo, selectedItem.getItem_name(), txtQty.getText(), selectedItem.getPrice(), amount, selectedItem.getShort_code());
+                        modelObservableList.add(billingModel);
+                    }
+                }
+            }else
+            {
+                double amt = Double.valueOf(txtQty.getText());
+                double price = Double.valueOf(selectedItem.getPrice());
+                amt = amt * price;
+                String amount = String.valueOf(amt);
+                BillingModel billingModel = new BillingModel(serialNo, selectedItem.getItem_name(), txtQty.getText(), selectedItem.getPrice(), amount, selectedItem.getShort_code());
+                modelObservableList.add(billingModel);
+                tableBill.setItems(modelObservableList);
+                setSubTotal();
+            }*/
 
         }
 
         serialNo++;
 
+
     }
 
 
+    public void setSubTotal()
+    {
+        subTotal = 0.0;
+        for (int j=0;j<modelObservableList.size();j++)
+        {
+            BillingModel billingModel = modelObservableList.get(j);
+            double price = Double.parseDouble(billingModel.getAmount());
+            subTotal = subTotal + price;
+        }
+
+        String subtotal = String.valueOf(subTotal);
+        txtTotalAmount.setText(subtotal);
+
+        if (!txtFiledDiscount.getText().isEmpty())
+        {
+            System.out.println(txtFiledDiscount.getText());
+            double totalAmount = Double.valueOf(txtTotalAmount.getText());
+            double getValue = Double.valueOf(txtFiledDiscount.getText());
+            getValue = getValue/100;
+            getValue = getValue*totalAmount;
+            txtFiledDiscountAmount.setText(String.valueOf(getValue));
+            txtFileldGross.setText(String.valueOf(totalAmount - getValue));
+        }
+
+    }
 
     @Override
     public void getSelectedResult(String result) {
@@ -343,6 +491,11 @@ public class BillingController implements Initializable, ItemSelectedListener  {
             System.out.println(subtotal);
             txtTotalAmount.setText(subtotal);
             modelObservableList.remove(list);
+            int itemIdDelete = Integer.parseInt(list.getItem_id());
+            System.out.println("item index---->"+itemIdList.indexOf(itemIdDelete));
+
+            itemIdList.remove(itemIdList.indexOf(itemIdDelete));
+            changeSNo();
         } else  {
             alert.close();
 
@@ -351,4 +504,56 @@ public class BillingController implements Initializable, ItemSelectedListener  {
     }
 
 
+    private void changeSNo()
+    {
+        serialNo = 0;
+        for (int i=0;i<modelObservableList.size();i++)
+        {
+            BillingModel billingModel = modelObservableList.get(i);
+            billingModel.setS_no(i+1);
+            modelObservableList.set(i,billingModel);
+        }
+        serialNo = modelObservableList.size()+1;
+
+    }
+
+
+
+    public void taxList()
+    {
+        retrofitService = RetrofitClient.getClient().create(APIService.class);
+
+        Call<RequestAndResponseModel> getTaxCall = retrofitService.getTaxList();
+        getTaxCall.enqueue(new Callback<RequestAndResponseModel>() {
+            @Override
+            public void onResponse(Call<RequestAndResponseModel> call, Response<RequestAndResponseModel> response) {
+                if (response.isSuccessful()) {
+                    RequestAndResponseModel requestAndResponseModel = response.body();
+
+
+                    for (int i=0;i < requestAndResponseModel.getList().size() ; i ++)
+                    {
+                        RequestAndResponseModel.list list = requestAndResponseModel.getList().get(i);
+                        getTaxListDetails.put(Integer.valueOf(list.getId()),list.getName());
+
+                        if (list.getActive() == 1)
+                        {
+                            if (list.getComp1() != 0&& list.getComp2() != 0)
+                            {
+                                Integer comb = list.getComp1();
+                                System.out.println("get combination--->"+getTaxListDetails.get(comb));
+                            }
+                        }
+                    }
+
+                }
+                System.out.println(getTaxListDetails);
+            }
+
+            @Override
+            public void onFailure(Call<RequestAndResponseModel> call, Throwable throwable) {
+
+            }
+        });
+    }
 }

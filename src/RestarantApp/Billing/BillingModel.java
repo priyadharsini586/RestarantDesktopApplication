@@ -3,16 +3,26 @@ package RestarantApp.Billing;
 public class BillingModel {
 
     int s_no;
-    String item_name,quantity,rate,amount;
+    String item_name,quantity,rate,amount,item_id;
 
-    public BillingModel(int s_no,String item_name,String quantity,String rate,String amount)
+    public BillingModel(int s_no,String item_name,String quantity,String rate,String amount,String item_id)
     {
         this.s_no = s_no;
         this.item_name = item_name;
         this.quantity = quantity;
         this.rate = rate;
          this.amount = amount;
+         this.item_id = item_id;
     }
+
+    public String getItem_id() {
+        return item_id;
+    }
+
+    public void setItem_id(String item_id) {
+        this.item_id = item_id;
+    }
+
     public int getS_no() {
         return s_no;
     }
