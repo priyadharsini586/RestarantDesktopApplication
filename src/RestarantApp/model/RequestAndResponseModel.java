@@ -85,7 +85,15 @@ public class RequestAndResponseModel {
     }
     public static class list {
         String id, name, tag_line, image;
-        int active,comp1,comp2;
+        int active,comp1,comp2,value;
+
+        public int getValue() {
+            return value;
+        }
+
+        public void setValue(int value) {
+            this.value = value;
+        }
 
         public int getActive() {
             return active;

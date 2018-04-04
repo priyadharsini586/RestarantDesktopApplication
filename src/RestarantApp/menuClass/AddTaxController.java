@@ -214,10 +214,18 @@ public class AddTaxController implements Initializable {
 
         retrofitClient = RetrofitClient.getClient().create(APIService.class);
         JSONObject jsonObject = new JSONObject();
+        String value ;
+        if (textFiledValue.getText().isEmpty())
+        {
+            value = "0";
+        }else
+        {
+            value = textFiledValue.getText();
+        }
         System.out.println(getComboId);
         try {
             jsonObject.put("tax_name",textFieldName.getText());
-            jsonObject.put("value",textFiledValue.getText());
+            jsonObject.put("value",value);
             jsonObject.put("comp1",comboValue1);
             jsonObject.put("comp2",comboValue2);
             jsonObject.put("active",checkActive);

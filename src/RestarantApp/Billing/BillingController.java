@@ -7,6 +7,7 @@ import RestarantApp.aaditionalClass.EditingCell;
 import RestarantApp.menuClass.ViewCategoryController;
 import RestarantApp.model.ItemListRequestAndResponseModel;
 import RestarantApp.model.RequestAndResponseModel;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -51,19 +52,20 @@ public class BillingController implements Initializable, ItemSelectedListener  {
     APIService retrofitService;
     Set<String> itemName = new HashSet<>();
     Set<String> itemId =  new HashSet<>();
+    int intTaxPrice;
     ArrayList<ItemListRequestAndResponseModel.item_list> billingItemDetails = new ArrayList<>();
     @FXML
     TableView<BillingModel> tableBill;
     @FXML
     TableColumn colSno,colItem,colQty,colRate,colAmount;
     @FXML
-    TextField txtQty,txtTotalAmount,txtFiledDiscount,txtFiledDiscountAmount,txtFileldGross;
+    TextField txtQty,txtTotalAmount,txtFiledDiscount,txtFiledDiscountAmount,txtFileldGross,txtGstPercent,txtTotal,txtRounding,txtNetAmount;
     ObservableList<BillingModel> modelObservableList = FXCollections.observableArrayList();
     ItemListRequestAndResponseModel.item_list selectedItem;
     double subTotal;
     int serialNo = 1;
     ArrayList<Integer> itemIdList = new ArrayList<>();
-    HashMap<Integer,String> getTaxListDetails = new HashMap<>();
+    HashMap<Integer,Integer> getTaxListDetails = new HashMap<>();
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         itemLoadProgres.setVisible(false);
@@ -110,35 +112,10 @@ public class BillingController implements Initializable, ItemSelectedListener  {
         txtQty.setText("1");
 
 
-        txtFiledDiscount.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!txtTotalAmount.getText().equals("0.0"))
-                {
-                    System.out.println(newValue);
-                    double totalAmount = Double.valueOf(txtTotalAmount.getText());
-                    double getValue = Double.valueOf(newValue);
-                    getValue = getValue/100;
-                    getValue = getValue*totalAmount;
-                    txtFiledDiscountAmount.setText(String.valueOf(getValue));
-                    txtFileldGross.setText(String.valueOf(totalAmount - getValue));
-                }
-            }
-        });
+        txtFiledDiscount.textProperty().addListener(addDiscountPercentage);//discount percentage
+        txtFiledDiscountAmount.textProperty().addListener(addDiscountAmount);//discount amount
 
-        txtFiledDiscountAmount.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!txtTotalAmount.getText().equals("0.0"))
-                {
-                    double totalAmount = Double.valueOf(txtTotalAmount.getText());
-                    double getValue = Double.valueOf(newValue);
-                    txtFiledDiscount.setText("");
-                    if (!newValue.isEmpty())
-                        txtFileldGross.setText(String.valueOf(totalAmount - getValue));
-                }
-            }
-        });
+
     }
 
 
@@ -193,11 +170,6 @@ public class BillingController implements Initializable, ItemSelectedListener  {
         );
 
         colAmount.setPrefWidth( 120 );
-
-
-
-
-
 
 
         tableBill.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
@@ -439,17 +411,44 @@ public class BillingController implements Initializable, ItemSelectedListener  {
 
         String subtotal = String.valueOf(subTotal);
         txtTotalAmount.setText(subtotal);
-
+        double totalAmount = Double.valueOf(txtTotalAmount.getText());
         if (!txtFiledDiscount.getText().isEmpty())
         {
             System.out.println(txtFiledDiscount.getText());
-            double totalAmount = Double.valueOf(txtTotalAmount.getText());
+
             double getValue = Double.valueOf(txtFiledDiscount.getText());
             getValue = getValue/100;
             getValue = getValue*totalAmount;
             txtFiledDiscountAmount.setText(String.valueOf(getValue));
             txtFileldGross.setText(String.valueOf(totalAmount - getValue));
+
+            double fromGst = Double.valueOf(txtGstPercent.getText().replace("%",""));
+            double getGst = fromGst/100;
+            getGst = getGst * totalAmount;
+            txtTotal.setText(String.valueOf(getGst + totalAmount - getValue));
+            roundValue();
+
+        }else if (!txtFiledDiscountAmount.getText().isEmpty())
+        {
+
+            double getValue = Double.valueOf(txtFiledDiscountAmount.getText());
+            txtFileldGross.setText(String.valueOf(totalAmount - getValue));
+
+            double fromGst = Double.valueOf(txtGstPercent.getText().replace("%",""));
+            double getGst = fromGst/100;
+            getGst = getGst * totalAmount;
+            txtTotal.setText(String.valueOf(getGst + totalAmount - getValue));
+            roundValue();
+        } else
+        {
+            txtFileldGross.setText(String.valueOf(totalAmount));
+            double fromGst = Double.valueOf(txtGstPercent.getText().replace("%",""));
+            double getGst = fromGst/100;
+            getGst = getGst * totalAmount;
+            txtTotal.setText(String.valueOf(getGst + totalAmount));
+            roundValue();
         }
+
 
     }
 
@@ -534,14 +533,20 @@ public class BillingController implements Initializable, ItemSelectedListener  {
                     for (int i=0;i < requestAndResponseModel.getList().size() ; i ++)
                     {
                         RequestAndResponseModel.list list = requestAndResponseModel.getList().get(i);
-                        getTaxListDetails.put(Integer.valueOf(list.getId()),list.getName());
+                        getTaxListDetails.put(Integer.valueOf(list.getId()),list.getValue());
 
                         if (list.getActive() == 1)
                         {
                             if (list.getComp1() != 0&& list.getComp2() != 0)
                             {
-                                Integer comb = list.getComp1();
-                                System.out.println("get combination--->"+getTaxListDetails.get(comb));
+                                Integer comb1 = list.getComp1();
+                                Integer comb2 = list.getComp2();
+                                System.out.println("get combination--->"+getTaxListDetails.get(comb1));
+
+                                intTaxPrice = comb1+comb2;
+                                System.out.println("get combination--->"+intTaxPrice);
+                                txtGstPercent.setText(String.valueOf(intTaxPrice)+"%");
+                                txtGstPercent.setEditable(false);
                             }
                         }
                     }
@@ -556,4 +561,192 @@ public class BillingController implements Initializable, ItemSelectedListener  {
             }
         });
     }
+
+    public void roundValue()
+    {
+        String totalValue = txtTotal.getText();
+        String[] totalValueSplit = totalValue.split("\\.");
+        if (totalValueSplit[1] != null)
+        {
+            String firstChar = String.valueOf(totalValueSplit[1].charAt(0));
+            int split2 = Integer.parseInt(firstChar);
+            if (split2 != 0)
+            {
+                if (split2 > 5)
+                {
+                    System.out.println("greater than 5");
+
+                    int roundValue = Integer.parseInt(totalValueSplit[0]);
+                    int actulaValue = roundValue + 1;
+                    txtNetAmount.setText(String.valueOf(actulaValue));
+
+                    double rounding = Double.valueOf(txtTotal.getText());
+                    System.out.println(String.valueOf(rounding - actulaValue));
+                    txtRounding.setText(String.valueOf(rounding - actulaValue));
+                    String round = String.valueOf(rounding - actulaValue);
+
+                    if (round.contains("-"))
+                    {
+                        round = "+ "+round.substring(1);
+                        txtRounding.setText(round);
+                    }else
+                    {
+                        round = "- "+round;
+                        txtRounding.setText(round);
+                    }
+
+
+                }else if (split2 < 5)
+                {
+                    System.out.println("less than 5");
+                    int roundValue = Integer.parseInt(totalValueSplit[0]);
+                    int actulaValue = roundValue ;
+                    txtNetAmount.setText(String.valueOf(actulaValue));
+
+                    double rounding = Double.valueOf(txtTotal.getText());
+                    System.out.println(String.valueOf(rounding - actulaValue));
+                    String round = String.valueOf(rounding - actulaValue);
+//                    txtRounding.setText(round);
+                    if (round.contains("-"))
+                    {
+                        round = "+ "+round.substring(1);
+                        txtRounding.setText(round);
+                    }else
+                    {
+                        round = "- "+round.substring(1);
+                        txtRounding.setText(round);
+                    }
+
+                }else
+                {
+                    System.out.println("equals to 5");
+
+                    int roundValue = Integer.parseInt(totalValueSplit[0]);
+                    int actulaValue = roundValue + 1;
+                    txtNetAmount.setText(String.valueOf(actulaValue));
+
+                    double rounding = Double.valueOf(txtTotal.getText());
+                    System.out.println(String.valueOf(rounding - actulaValue));
+                    txtRounding.setText(String.valueOf(rounding - actulaValue));
+                    String round = String.valueOf(rounding - actulaValue);
+                    if (round.contains("-"))
+                    {
+                        round = "+ "+round.substring(1);
+                        txtRounding.setText(round);
+                    }else
+                    {
+                        txtRounding.setText(round);
+                    }
+                }
+            }else
+            {
+                System.out.println("retuns 0");
+                txtNetAmount.setText(totalValueSplit[0]);
+                txtRounding.setText("0");
+            }
+        }
+
+    }
+
+    public void calculatePergentage(String discountValue)
+    {
+        double totalAmount = Double.valueOf(txtTotalAmount.getText());
+        double givenValue = Double.valueOf(discountValue);
+        double percentage = givenValue / totalAmount;
+        percentage = percentage * 100;
+        System.out.println("new percentage---->"+String.valueOf(percentage));
+        String percent = String.valueOf(percentage);
+        if (percent.contains("."))
+        {
+            String[] split= percent.split("//.");
+            txtFiledDiscount.setText(split[0]);
+
+        }else {
+            txtFiledDiscount.setText(percent);
+        }
+
+    }
+
+    ChangeListener<String> addDiscountPercentage = new ChangeListener<String>() {
+        @Override
+        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
+
+
+            double totalAmount = Double.valueOf(txtTotalAmount.getText());
+
+            if (!txtTotalAmount.getText().equals("0.0"))
+            {
+                double getValue = 0.0;
+
+                if (newValue.isEmpty())
+                {
+                    txtFileldGross.setText(String.valueOf(totalAmount));
+                    double fromGst = Double.valueOf(txtGstPercent.getText().replace("%",""));
+                    double getGst = fromGst/100;
+                    getGst = getGst * totalAmount ;
+                    txtTotal.setText(String.valueOf(getGst + totalAmount));
+                    roundValue();
+                }else {
+                    getValue = Double.valueOf(newValue);
+                }
+
+                System.out.println(newValue);
+
+                getValue = getValue/100;
+                getValue = getValue*totalAmount;
+
+                txtFiledDiscountAmount.setText(String.valueOf(getValue));
+
+                txtFileldGross.setText(String.valueOf(totalAmount - getValue));
+
+                if (!newValue.isEmpty()) {
+                    txtFileldGross.setText(String.valueOf(totalAmount - getValue));
+                    double fromGross = Double.valueOf(txtFileldGross.getText());
+                    double fromGst = Double.valueOf(txtGstPercent.getText().replace("%",""));
+                    double getGst = fromGst/100;
+                    getGst = getGst * fromGross;
+                    txtTotal.setText(String.valueOf(getGst + fromGross));
+                    roundValue();
+                }
+            }
+        }
+    };
+
+    ChangeListener<String> addDiscountAmount = new ChangeListener<String>() {
+        @Override
+        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
+            if (!newValue.isEmpty())
+                calculatePergentage(newValue);
+            if (!txtTotalAmount.getText().equals("0.0"))
+            {
+
+                double totalAmount = Double.valueOf(txtTotalAmount.getText());
+
+                double getValue = 0.0;
+                if (newValue.isEmpty())
+                {
+                    txtFileldGross.setText(String.valueOf(totalAmount));
+                    double fromGst = Double.valueOf(txtGstPercent.getText().replace("%",""));
+                    double getGst = fromGst/100;
+                    getGst = getGst * totalAmount ;
+                    txtTotal.setText(String.valueOf(getGst + totalAmount));
+                    roundValue();
+                }else {
+                    getValue = Double.valueOf(newValue);
+                }
+                if (!newValue.isEmpty()) {
+                    txtFileldGross.setText(String.valueOf(totalAmount - getValue));
+                    double fromGross = Double.valueOf(txtFileldGross.getText());
+                    double fromGst = Double.valueOf(txtGstPercent.getText().replace("%",""));
+                    double getGst = fromGst/100;
+                    getGst = getGst * fromGross;
+                    txtTotal.setText(String.valueOf(getGst + fromGross));
+                    roundValue();
+                }
+            }
+        }
+    };
+
 }

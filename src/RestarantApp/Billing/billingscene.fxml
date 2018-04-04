@@ -144,10 +144,10 @@
                      </font></TextField>
                   <TextField fx:id="txtFiledDiscountAmount" layoutX="165.0" layoutY="47.0" prefHeight="25.0" prefWidth="127.0" />
                   <TextField fx:id="txtFileldGross" layoutX="166.0" layoutY="86.0" prefHeight="25.0" prefWidth="127.0" />
-                  <TextField layoutX="166.0" layoutY="126.0" prefHeight="25.0" prefWidth="127.0" />
-                  <TextField layoutX="165.0" layoutY="170.0" prefHeight="25.0" prefWidth="127.0" />
-                  <TextField layoutX="165.0" layoutY="213.0" prefHeight="25.0" prefWidth="127.0" />
-                  <TextField layoutX="165.0" layoutY="257.0" prefHeight="25.0" prefWidth="127.0" />
+                  <TextField fx:id="txtGstPercent" layoutX="166.0" layoutY="126.0" prefHeight="25.0" prefWidth="127.0" />
+                  <TextField fx:id="txtTotal" layoutX="165.0" layoutY="170.0" prefHeight="25.0" prefWidth="127.0" />
+                  <TextField fx:id="txtRounding" layoutX="165.0" layoutY="213.0" prefHeight="25.0" prefWidth="127.0" />
+                  <TextField fx:id="txtNetAmount" layoutX="165.0" layoutY="257.0" prefHeight="25.0" prefWidth="127.0" />
                   <TextField layoutX="164.0" layoutY="340.0" prefHeight="25.0" prefWidth="127.0" />
                   <Label layoutX="3.0" layoutY="304.0" text="Cash To be Received:" textFill="WHITE">
                      <font>

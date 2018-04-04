@@ -74,7 +74,9 @@ public class LoginController {
         stage.setScene(new Scene(root, visualBounds.getWidth(), visualBounds.getHeight()));
         stage.show();
 
-       /* Stage stage;
+
+/*
+        Stage stage;
         Parent root;
         stage=(Stage) btnLogin.getScene().getWindow();
         root = FXMLLoader.load(getClass().getResource("/RestarantApp/Dashboard/DashBoardScene.fxml"));

@@ -316,7 +316,7 @@ public class TaxListController implements Initializable {
                         {
                             itemListRequestAndResponseModel1.setStatus("DeActive");
                         }
-                        if (list.getValue().equals(""))
+                        if (list.getValue().equals("0"))
                         {
                             itemListRequestAndResponseModel1.setValue("-");
                         }else
@@ -427,12 +427,12 @@ public class TaxListController implements Initializable {
                 if (response.isSuccessful()) {
                     RequestAndResponseModel requestAndResponseModel = response.body();
                     System.out.println(requestAndResponseModel.getStatus_message());
-                    if (requestAndResponseModel.getStatus_code().equals(Constants.Success))
+                    if (requestAndResponseModel.getSuccessCode().equals(Constants.Success))
                     {
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
-                                jfxSnackbar.show(requestAndResponseModel.getStatus_message(),5000);
+                                jfxSnackbar.show(requestAndResponseModel.getSuccessMessage(),5000);
                             }
                         });
                         data.remove(list);
