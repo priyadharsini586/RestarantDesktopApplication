@@ -66,6 +66,8 @@ public class BillingController implements Initializable, ItemSelectedListener  {
     int serialNo = 1;
     ArrayList<Integer> itemIdList = new ArrayList<>();
     HashMap<Integer,Integer> getTaxListDetails = new HashMap<>();
+    @FXML
+    ListView<String> listTableList;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         itemLoadProgres.setVisible(false);
@@ -73,6 +75,10 @@ public class BillingController implements Initializable, ItemSelectedListener  {
 
         String css = BillingController.class.getResource("/RestarantApp/cssFile/Login.css").toExternalForm();
         billingRootPane.getStylesheets().add(css);
+
+        ObservableList<String> items =FXCollections.observableArrayList (
+                "Table 1", "Table 2", "Table 3", "Table 3");
+        listTableList.setItems(items);
 
         setTableDetails();
 
@@ -116,6 +122,16 @@ public class BillingController implements Initializable, ItemSelectedListener  {
         txtFiledDiscountAmount.textProperty().addListener(addDiscountAmount);//discount amount
 
 
+
+        listTableList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                System.out.println("Selected item: " + newValue);
+
+
+
+            }
+        });
     }
 
 

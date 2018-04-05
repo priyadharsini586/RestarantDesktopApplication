@@ -13,8 +13,8 @@ public class Constants {
 
 //    public static String CATEGORY_BASE_URL = "https://prawnandcrab.com/webservice/images/category/";
 
-    public static String CATEGORY_BASE_URL = "http://192.168.1.3/prawnandcrab/webservice/images/category/";
-    public static String ITEM_BASE_URL = "http://192.168.1.3/prawnandcrab/webservice/images/item/";
+    public static String CATEGORY_BASE_URL = "http://192.168.1.2/prawnandcrab/webservice/images/category/";
+    public static String ITEM_BASE_URL = "http://192.168.1.2/prawnandcrab/webservice/images/item/";
 
 
     public static void showAlert(Alert.AlertType alertType,String title,String headerTxt,String content)
