@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<StackPane fx:id="catRootPane" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RestarantApp.menuClass.AddTableController">
+
+<children>
+        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="375.0" prefWidth="550.0" style="-fx-background-color: f68220; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" BorderPane.alignment="CENTER">
+            <children>
+                <Button fx:id="btnAddTable" layoutX="188.0" layoutY="232.0" mnemonicParsing="false" onAction="#btnAddTableAction" prefHeight="30.0" prefWidth="70.0" style="-fx-background-color: #008ccd;" text="Submit" textFill="WHITE" />
+                <ProgressIndicator fx:id="progressCategory" layoutX="280.0" layoutY="227.0" progress="0.0" visible="false" />
+                <ImageView fitHeight="40.0" fitWidth="140.0" layoutX="209.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="24.0">
+                    <image>
+                        <Image url="@../images/addtable.png" />
+                    </image>
+                </ImageView>
+                <Label layoutX="128.0" layoutY="108.0" text="Table Name :" textFill="WHITE">
+                    <font>
+                        <Font name="Times New Roman Bold" size="14.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="textFieldName" layoutX="223.0" layoutY="101.0" prefHeight="30.0" prefWidth="201.0" />
+                <Label layoutX="119.0" layoutY="180.0" text="Active Status :" textFill="WHITE">
+                    <font>
+                        <Font name="Times New Roman Bold" size="14.0" />
+                    </font>
+                </Label>
+                <ComboBox fx:id="tableStatus" layoutX="220.0" layoutY="171.0" prefHeight="30.0" prefWidth="201.0" promptText="Status" />
+            </children>
+        </AnchorPane>
+    </children>
+</StackPane>

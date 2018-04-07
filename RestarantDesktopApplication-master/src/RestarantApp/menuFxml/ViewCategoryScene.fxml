@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<StackPane fx:id="rootPane" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RestarantApp.menuClass.ViewCategoryController">
+   <children>
+      <AnchorPane prefHeight="418.0" prefWidth="580.0">
+         <children>
+            <TableView fx:id="tableIndex" layoutX="-3.0" prefHeight="418.0" prefWidth="302.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-3.0" AnchorPane.rightAnchor="281.0" AnchorPane.topAnchor="0.0">
+              <columns>
+                  <TableColumn fx:id="itemIdColm" editable="false" prefWidth="50.0" sortable="false" text="ID">
+                      <cellValueFactory><PropertyValueFactory property="id" />
+                      </cellValueFactory>
+
+                  </TableColumn>
+                  <TableColumn fx:id="itemNameColm" editable="false" prefWidth="100" sortable="false" text="Name">
+                      <cellValueFactory><PropertyValueFactory property="name" />
+                      </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn fx:id="itemTaglineColm" editable="false" prefWidth="100" sortable="false" text="Tag Line">
+                      <cellValueFactory><PropertyValueFactory property="tag_line" />
+                      </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn fx:id="itemImagecolm" editable="false" prefWidth="200" sortable="false" text="Image">
+                      <cellValueFactory><PropertyValueFactory property="image" />
+                      </cellValueFactory>
+                  </TableColumn>
+              </columns>
+            </TableView>
+            <AnchorPane fx:id="anchorEditItem" layoutX="272.0" layoutY="9.0" prefHeight="398.0" prefWidth="270.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+               <children>
+                  <AnchorPane layoutX="14.0" layoutY="17.0" prefHeight="376.0" prefWidth="242.0" style="-fx-border-color: white;" AnchorPane.rightAnchor="14.0">
+                     <children>
+                        <Label layoutX="5.0" layoutY="179.0" text="Image :" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                        </Label>
+                        <ImageView fx:id="imgEditImage" fitHeight="113.0" fitWidth="166.0" layoutX="54.0" layoutY="210.0" pickOnBounds="true" preserveRatio="true" />
+                     </children>
+                  </AnchorPane>
+                  <Label layoutX="21.0" layoutY="66.0" text="ID" textFill="WHITE">
+                     <font>
+                        <Font name="Times New Roman Bold" size="12.0" />
+                     </font></Label>
+                  <Label layoutX="21.0" layoutY="109.0" text="Name" textFill="WHITE">
+                     <font>
+                        <Font name="Times New Roman Bold" size="12.0" />
+                     </font></Label>
+                  <Label fx:id="txtFieldId" layoutX="64.0" layoutY="62.0" prefHeight="25.0" prefWidth="175.0" textFill="WHITE">
+                     <font>
+                        <Font name="Times New Roman Bold" size="12.0" />
+                     </font></Label>
+                  <TextField fx:id="txtFieldName" layoutX="67.0" layoutY="106.0" prefHeight="25.0" prefWidth="175.0" />
+                  <TextField fx:id="txtFieldTagLine" layoutX="68.0" layoutY="149.0" prefHeight="25.0" prefWidth="175.0" />
+                  <Label layoutX="18.0" layoutY="155.0" text="Tagline" textFill="WHITE">
+                     <font>
+                        <Font name="Times New Roman Bold" size="12.0" />
+                     </font></Label>
+                  <Button layoutX="71.0" layoutY="192.0" mnemonicParsing="false" onAction="#btnUploadEditAction" text="Upload" />
+                  <Button layoutX="109.0" layoutY="359.0" mnemonicParsing="false" onAction="#btnSubmitEdit" prefHeight="25.0" prefWidth="84.0" text="Submit" />
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="anchorViewItem" layoutX="310.0" layoutY="20.0" prefHeight="398.0" prefWidth="270.0" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+               <children>
+                  <AnchorPane layoutX="10.0" layoutY="14.0" prefHeight="376.0" prefWidth="255.0" style="-fx-border-color: white;" AnchorPane.rightAnchor="7.0" />
+                  <Label layoutX="40.0" layoutY="52.0" text="ID :" textFill="WHITE">
+                     <font>
+                        <Font name="Times New Roman Bold" size="13.0" />
+                     </font></Label>
+                  <Label layoutX="22.0" layoutY="88.0" text="Name :" textFill="WHITE">
+                     <font>
+                        <Font name="Times New Roman Bold" size="13.0" />
+                     </font></Label>
+                  <Label layoutX="17.0" layoutY="121.0" text="Tagline :" textFill="WHITE">
+                     <font>
+                        <Font name="Times New Roman Bold" size="13.0" />
+                     </font></Label>
+                  <ImageView fx:id="imgViewImage" fitHeight="150.0" fitWidth="200.0" layoutX="35.0" layoutY="168.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label fx:id="labId" layoutX="75.0" layoutY="48.0" text="Label" textFill="WHITE">
+                     <font>
+                        <Font name="Times New Roman Bold" size="17.0" />
+                     </font></Label>
+                  <Label fx:id="labViewName" layoutX="75.0" layoutY="84.0" text="Label" textFill="WHITE">
+                     <font>
+                        <Font name="Times New Roman Bold" size="17.0" />
+                     </font></Label>
+                  <Label fx:id="labTagLine" layoutX="75.0" layoutY="117.0" text="Label" textFill="WHITE">
+                     <font>
+                        <Font name="Times New Roman Bold" size="17.0" />
+                     </font></Label>
+               </children>
+            </AnchorPane>
+            <ImageView fx:id="imgNext" fitHeight="44.0" fitWidth="39.0" layoutX="255.0" layoutY="349.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="286.0">
+               <image>
+                  <Image url="@../images/next.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="imgPrevious" fitHeight="44.0" fitWidth="39.0" layoutX="213.0" layoutY="369.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="328.0">
+               <image>
+                  <Image url="@../images/previous.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

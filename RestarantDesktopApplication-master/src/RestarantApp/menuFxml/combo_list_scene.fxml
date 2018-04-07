@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane fx:id="rootPane" prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RestarantApp.menuClass.ComboListController">
+    <children>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <TableView fx:id="tableComboList" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <columns>
+                        <TableColumn fx:id="comboId" prefWidth="75.0" text="Id">
+                            <cellValueFactory><PropertyValueFactory property="id" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="comboName" prefWidth="75.0" text="Name">
+                            <cellValueFactory><PropertyValueFactory property="name" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="comboList" prefWidth="75.0" text="Combo List">
+                            <cellValueFactory><PropertyValueFactory property="comboList" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="comboStatus" prefWidth="75.0" text="Status">
+                            <cellValueFactory><PropertyValueFactory property="status" />
+                            </cellValueFactory>
+                        </TableColumn>
+                    </columns>
+                </TableView>
+                <ImageView fx:id="imgNext" fitHeight="44.0" fitWidth="39.0" layoutX="255.0" layoutY="349.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="25.0">
+                    <image>
+                        <Image url="@../images/next.png" />
+                    </image>
+                </ImageView>
+                <ImageView fx:id="imgPrevious" fitHeight="44.0" fitWidth="39.0" layoutX="213.0" layoutY="369.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="328.0">
+                    <image>
+                        <Image url="@../images/previous.png" />
+                    </image>
+                </ImageView>
+            </children>
+        </AnchorPane>
+    </children>
+</StackPane>

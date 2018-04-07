@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+<?import org.controlsfx.control.CheckComboBox?>
+
+<StackPane fx:id="catRootPane" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RestarantApp.popup.ComboActionPopup">
+    <children>
+        <AnchorPane fx:id="anchorEdit" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="375.0" prefWidth="550.0" style="-fx-background-color: f68220; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label alignment="CENTER" layoutX="100.0" layoutY="160.0" text="Combo Name :" textFill="WHITE">
+                    <font>
+                        <Font name="Times New Roman Bold" size="14.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="editComboName" layoutX="208.0" layoutY="155.0" prefHeight="28.0" prefWidth="197.0" />
+                <CheckComboBox fx:id="editCheckItemList" layoutX="208.0" layoutY="201.0" prefHeight="28.0" prefWidth="197.0" />
+                <Label layoutX="127.0" layoutY="206.0" text="Item List :" textFill="WHITE">
+                    <font>
+                        <Font name="Times New Roman Bold" size="14.0" />
+                    </font>
+                </Label>
+                <Button layoutX="239.0" layoutY="295.0" mnemonicParsing="false" onMouseClicked="#btnSubmitUpdate" prefHeight="28.0" prefWidth="69.0" style="-fx-background-color: #008ccd;" text="Submit" textFill="WHITE" />
+                <ProgressIndicator fx:id="progressCategory" layoutX="280.0" layoutY="227.0" progress="0.0" visible="false" />
+            <Label layoutX="142.0" layoutY="251.0" text="Active : " textFill="WHITE">
+               <font>
+                  <Font name="Times New Roman Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="129.0" layoutY="117.0" text="Combo Id :" textFill="WHITE">
+               <font>
+                  <Font name="Times New Roman Bold" size="13.0" />
+               </font>
+            </Label>
+            <Label fx:id="editComboId" layoutX="208.0" layoutY="107.0" prefHeight="30.0" prefWidth="197.0" textFill="WHITE">
+               <font>
+                  <Font name="Times New Roman Bold" size="14.0" />
+               </font></Label>
+            <ImageView fitHeight="54.0" fitWidth="168.0" layoutX="203.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="26.0">
+               <image>
+                  <Image url="@../images/comboupdate.png" />
+               </image>
+            </ImageView>
+            <Pane layoutX="520.0" prefHeight="30.0" prefWidth="30.0" style="-fx-border-color: #f5ad70;" />
+            <ImageView fx:id="editCloseImage" fitHeight="25.0" fitWidth="25.0" layoutX="524.0" layoutY="3.0" onMouseClicked="#editCloseImageAction" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/close.png" />
+               </image>
+            </ImageView>
+            <Pane layoutX="490.0" prefHeight="30.0" prefWidth="30.0" style="-fx-border-color: #f5ad70;">
+               <children>
+                  <ImageView fx:id="editMinImage" fitHeight="16.0" fitWidth="25.0" layoutX="7.0" layoutY="8.0" onMouseClicked="#editMinImageAction" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/min.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            <ComboBox fx:id="editComboStatus" layoutX="208.0" layoutY="247.0" prefWidth="197.0" promptText="Status" />
+            </children>
+        </AnchorPane>
+      <AnchorPane fx:id="anchorView" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="375.0" prefWidth="550.0" style="-fx-background-color: f68220; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);">
+         <children>
+            <Label alignment="CENTER" layoutX="127.0" layoutY="184.0" text="Combo Name :" textFill="WHITE">
+               <font>
+                  <Font name="Times New Roman Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="152.0" layoutY="222.0" text="Item List :" textFill="WHITE">
+               <font>
+                  <Font name="Times New Roman Bold" size="14.0" />
+               </font>
+            </Label>
+            <ProgressIndicator fx:id="progressCategory1" layoutX="280.0" layoutY="227.0" progress="0.0" visible="false" />
+            <Label layoutX="167.0" layoutY="263.0" text="Active :" textFill="WHITE">
+               <font>
+                  <Font name="Times New Roman Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="153.0" layoutY="141.0" text="Combo Id :" textFill="WHITE">
+               <font>
+                  <Font name="Times New Roman Bold" size="13.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="54.0" fitWidth="168.0" layoutX="200.0" layoutY="52.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="52.0">
+               <image>
+                  <Image url="@../images/viewcombo.png" />
+               </image>
+            </ImageView>
+            <Pane layoutX="519.0" prefHeight="30.0" prefWidth="30.0" style="-fx-border-color: #f5ad70;" />
+            <ImageView fx:id="viewCloseImage" fitHeight="25.0" fitWidth="25.0" layoutX="523.0" layoutY="3.0" onMouseClicked="#viewCloseImageAction" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/close.png" />
+               </image>
+            </ImageView>
+            <Pane layoutX="489.0" prefHeight="30.0" prefWidth="30.0" style="-fx-border-color: #f5ad70;">
+               <children>
+                  <ImageView fx:id="viewMinImage" fitHeight="16.0" fitWidth="25.0" layoutX="7.0" layoutY="8.0" onMouseClicked="#viewMinImageAction" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/min.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            <Label fx:id="labComboId" layoutX="231.0" layoutY="135.0" text="Label" textFill="WHITE">
+               <font>
+                  <Font name="Times New Roman Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="labComboName" layoutX="231.0" layoutY="175.0" text="Label" textFill="WHITE">
+               <font>
+                  <Font name="Times New Roman Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="labComboList" layoutX="231.0" layoutY="217.0" text="Label" textFill="WHITE">
+               <font>
+                  <Font name="Times New Roman Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="labComboStatus" layoutX="230.0" layoutY="258.0" text="Label" textFill="WHITE">
+               <font>
+                  <Font name="Times New Roman Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+    </children>
+</StackPane>

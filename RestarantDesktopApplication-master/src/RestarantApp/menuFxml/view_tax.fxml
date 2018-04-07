@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane fx:id="rootPane" prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RestarantApp.menuClass.TaxListController">
+   <children>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <TableView fx:id="tableTax" layoutX="24.0" layoutY="28.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                    <columns>
+                      <TableColumn fx:id="taxIdCol" prefWidth="75.0" text="Id">
+                          <cellValueFactory><PropertyValueFactory property="id" />
+                          </cellValueFactory>
+                      </TableColumn>
+                      <TableColumn fx:id="taxNameCol" prefWidth="75.0" text="Name">
+                          <cellValueFactory><PropertyValueFactory property="name" />
+                          </cellValueFactory>
+                      </TableColumn>
+                        <TableColumn fx:id="taxValueCol" prefWidth="75.0" text="Value">
+                            <cellValueFactory><PropertyValueFactory property="value" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="taxCombinationCol" prefWidth="75.0" text="Combination">
+                            <cellValueFactory><PropertyValueFactory property="combine" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="taxStatusColm" prefWidth="75.0" text="Status">
+                            <cellValueFactory><PropertyValueFactory property="status" />
+                            </cellValueFactory>
+                        </TableColumn>
+                    </columns>
+                  </TableView>
+                   <ImageView fx:id="imgNext" fitHeight="44.0" fitWidth="39.0" layoutX="255.0" layoutY="349.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="25.0">
+                       <image>
+                           <Image url="@../images/next.png" />
+                       </image>
+                   </ImageView>
+                   <ImageView fx:id="imgPrevious" fitHeight="44.0" fitWidth="39.0" layoutX="213.0" layoutY="369.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="328.0">
+                       <image>
+                           <Image url="@../images/previous.png" />
+                       </image>
+                   </ImageView>
+               </children>
+            </AnchorPane>
+   </children>
+</StackPane>

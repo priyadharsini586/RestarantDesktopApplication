@@ -1,0 +1,94 @@
+.loginBg{
+	 -fx-background-image:url("../images/bg.png");
+    -fx-background-position:center;
+    -fx-background-size:cover;
+	-fx-background-attachment:fixed;
+}
+.loginbox{
+-fx-background-radius: 10 10 10 10;
+	
+}
+.table-row-cell:empty {
+    /*-fx-background-color: khaki;*/
+    /*-fx-border-color: grey*/
+
+    -fx-background-color: white;
+}
+
+.table-row-cell:hover{
+    -fx-background-color: linear-gradient(rgba(211,211,211,1),rgba(255,255,255,0.5));
+}
+
+.table-row-cell:selected{
+    -fx-background-color: orange;
+
+}
+.table-row-cell:selected.table-row-cell .text{
+    -fx-fill: white ;
+    -fx-font-weight: bold;
+}
+.table-row-cell {
+    -fx-background-color: white;
+
+}
+.table-row-cell .text {
+    -fx-fill: black ;
+    -fx-font-size: 15;
+    -fx-alignment: center;
+    -fx-font-weight: bold;
+}
+
+.table-row-cell:empty .table-cell {
+    -fx-border-width: 0px;
+}
+.table-column {
+    -fx-alignment: CENTER;
+    -fx-border-color: grey;
+    -fx-border-width: 1px
+}
+
+
+
+.jfx-snackbar-content {
+    -fx-background-color: #323232;
+}
+.jfx-snackbar-toast {
+    -fx-text-fill: WHITE;
+}
+
+.combo-box-base {
+    -fx-background-color: WHITE;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius: 3px, 3px, 2px, 1px;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
+    -fx-text-fill: -fx-text-base-color;
+    -fx-alignment: CENTER;
+    -fx-content-display: CENTER;
+}
+.combo-box-popup .list-view
+{
+    -fx-background-color: -fx-box-border, -fx-control-inner-background;
+    -fx-background-insets: 0, 1;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 8, 0.0 , 0 , 0 );
+}
+
+.combo-box
+{
+    -fx-background-color:WHITE;
+    -fx-text-fill: red;
+}
+.dashboard{
+    -fx-background-image:url("../images/backgroun-bg.jpg");
+    -fx-background-position:center;
+    -fx-background-size:cover;
+    -fx-background-attachment:fixed;
+}
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-color:  #f58220;
+    -fx-border-width: 1;
+    -fx-background-insets: 0;
+
+}
+
