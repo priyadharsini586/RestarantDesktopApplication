@@ -1,6 +1,7 @@
 package RestarantApp.chat.rabbitmq_server;
 
 import RestarantApp.aaditionalClass.AsyncTask;
+import RestarantApp.chat.GetFromServerListener;
 import RestarantApp.chat.rabbitmq_stomp.Client;
 import RestarantApp.chat.rabbitmq_stomp.Listener;
 import RestarantApp.model.Constants;
@@ -19,6 +20,12 @@ import java.util.Optional;
 
 public class RabbitmqServer extends AsyncTask {
     public static Client client;
+
+    public static GetFromServerListener fromServerListener;
+    public RabbitmqServer(GetFromServerListener getFromServerListener)
+    {
+        this.fromServerListener = getFromServerListener;
+    }
     @Override
     public void onPreExecute() {
         System.out.println("Pre Called");
@@ -36,8 +43,11 @@ public class RabbitmqServer extends AsyncTask {
                 public void message(Map headers, String body) {
                     if (body.equals("null")) {
                         System.out.println("null");
+                    }else
+                    {
+                        fromServerListener.getFromServer(body);
                     }
-                    System.out.println(body);
+
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {

@@ -4,9 +4,12 @@ import RestarantApp.Network.APIService;
 import RestarantApp.Network.RetrofitClient;
 import RestarantApp.aaditionalClass.AutoCompleteTextField;
 import RestarantApp.aaditionalClass.EditingCell;
+import RestarantApp.chat.GetFromServerListener;
+import RestarantApp.chat.rabbitmq_server.RabbitmqServer;
 import RestarantApp.menuClass.ViewCategoryController;
 import RestarantApp.model.ItemListRequestAndResponseModel;
 import RestarantApp.model.RequestAndResponseModel;
+import com.google.gson.JsonObject;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ChangeListener;
@@ -28,6 +31,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,7 +41,7 @@ import retrofit2.Response;
 import java.net.URL;
 import java.util.*;
 
-public class BillingController implements Initializable, ItemSelectedListener  {
+public class BillingController implements Initializable, ItemSelectedListener, GetFromServerListener {
 
     @FXML
     AnchorPane billingRootPane;
@@ -66,6 +72,8 @@ public class BillingController implements Initializable, ItemSelectedListener  {
     int serialNo = 1;
     ArrayList<Integer> itemIdList = new ArrayList<>();
     HashMap<Integer,Integer> getTaxListDetails = new HashMap<>();
+    ObservableList<String> tableList = FXCollections.observableArrayList();
+    HashMap<String,ObservableList<BillingModel>> tableListValue = new HashMap<>();
     @FXML
     ListView<String> listTableList;
     @Override
@@ -76,10 +84,10 @@ public class BillingController implements Initializable, ItemSelectedListener  {
         String css = BillingController.class.getResource("/RestarantApp/cssFile/Login.css").toExternalForm();
         billingRootPane.getStylesheets().add(css);
 
-        ObservableList<String> items =FXCollections.observableArrayList (
-                "Table 1", "Table 2", "Table 3", "Table 3");
-        listTableList.setItems(items);
 
+
+
+        new RabbitmqServer(this).execute();
         setTableDetails();
 
         getData();
@@ -128,6 +136,15 @@ public class BillingController implements Initializable, ItemSelectedListener  {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 System.out.println("Selected item: " + newValue);
 
+                modelObservableList = tableListValue.get(newValue);
+                tableBill.setItems(modelObservableList);
+                for (int k = 0 ; k <modelObservableList.size();k++)
+                {
+                    BillingModel billingModel = modelObservableList.get(k);
+                    itemIdList.add(Integer.parseInt(billingModel.getItem_id()));
+
+                }
+                setSubTotal();
 
 
             }
@@ -765,4 +782,52 @@ public class BillingController implements Initializable, ItemSelectedListener  {
         }
     };
 
+
+    @Override
+    public void getFromServer(String body) {
+        System.out.print("from server---->"+body);
+        try {
+            JSONObject itemList = new JSONObject(body);
+           if (itemList.has("table"))
+           {
+               String table = itemList.getString("table");
+              if (!tableList.contains(table))
+               {
+                   tableList.add(table);
+                   listTableList.setItems(tableList);
+                   if (itemList.has("Item_list"))
+                   {
+                       JSONArray itemListArray = itemList.getJSONArray("Item_list");
+                       for (int j=0;j<itemListArray.length();j++)
+                       {
+                           JSONObject item = itemListArray.getJSONObject(j);
+                           serialNo = serialNo  + j;
+                           String item_name = item.getString("item_name");
+                           String qty = item.getString("qty");
+                           String rate = item.getString("price");
+                           String shortCode = item.getString("short_code");
+                           double amt = Double.valueOf(qty);
+                           double price = Double.valueOf(rate);
+                           amt = amt * price;
+                           String amount = String.valueOf(amt);
+                           BillingModel billingModel = new BillingModel(serialNo,item_name,qty,rate,amount,shortCode);
+                           modelObservableList.add(billingModel);
+
+
+                  /* tableBill.setItems(modelObservableList);
+                   itemIdList.add(Integer.parseInt(selectedItem.getShort_code()));
+                   setSubTotal();  */
+                       }
+                       tableListValue.put(table,modelObservableList);
+                   }
+
+               }
+           }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
