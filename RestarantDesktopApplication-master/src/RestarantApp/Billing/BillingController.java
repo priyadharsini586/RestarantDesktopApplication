@@ -477,7 +477,7 @@ public class BillingController implements Initializable, ItemSelectedListener, G
             txtFileldGross.setText(String.valueOf(totalAmount));
             double fromGst = Double.valueOf(txtGstPercent.getText().replace("%",""));
             double getGst = fromGst/100;
-            getGst = getGst * totalAmount;
+            getGst = getGst * totalAmount ;
             txtTotal.setText(String.valueOf(getGst + totalAmount));
             roundValue();
         }
