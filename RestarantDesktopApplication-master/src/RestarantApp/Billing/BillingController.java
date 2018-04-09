@@ -1,12 +1,16 @@
 package RestarantApp.Billing;
 
 import RestarantApp.Network.APIService;
+import RestarantApp.Network.NetworkChangeListener;
+import RestarantApp.Network.NetworkConnection;
 import RestarantApp.Network.RetrofitClient;
 import RestarantApp.aaditionalClass.AutoCompleteTextField;
 import RestarantApp.aaditionalClass.EditingCell;
 import RestarantApp.chat.GetFromServerListener;
 import RestarantApp.chat.rabbitmq_server.RabbitmqServer;
+import RestarantApp.chat.rabbitmq_stomp.Listener;
 import RestarantApp.menuClass.ViewCategoryController;
+import RestarantApp.model.Constants;
 import RestarantApp.model.ItemListRequestAndResponseModel;
 import RestarantApp.model.RequestAndResponseModel;
 import com.google.gson.JsonObject;
@@ -41,7 +45,7 @@ import retrofit2.Response;
 import java.net.URL;
 import java.util.*;
 
-public class BillingController implements Initializable, ItemSelectedListener, GetFromServerListener {
+public class BillingController implements Initializable, ItemSelectedListener, GetFromServerListener, NetworkChangeListener {
 
     @FXML
     AnchorPane billingRootPane;
@@ -74,6 +78,7 @@ public class BillingController implements Initializable, ItemSelectedListener, G
     HashMap<Integer,Integer> getTaxListDetails = new HashMap<>();
     ObservableList<String> tableList = FXCollections.observableArrayList();
     HashMap<String,ObservableList<BillingModel>> tableListValue = new HashMap<>();
+    String selectedTable;
     @FXML
     ListView<String> listTableList;
     @Override
@@ -89,6 +94,7 @@ public class BillingController implements Initializable, ItemSelectedListener, G
 
         new RabbitmqServer(this).execute();
         setTableDetails();
+        NetworkConnection networkConnection = new NetworkConnection(BillingController.this);
 
         getData();
         taxList();
@@ -134,18 +140,18 @@ public class BillingController implements Initializable, ItemSelectedListener, G
         listTableList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                System.out.println("Selected item: " + newValue);
+                if (newValue != null) {
+                    selectedTable = newValue;
+                    modelObservableList = tableListValue.get(newValue);
+                    tableBill.setItems(modelObservableList);
+                    for (int k = 0; k < modelObservableList.size(); k++) {
+                        BillingModel billingModel = modelObservableList.get(k);
+                        itemIdList.add(Integer.parseInt(billingModel.getItem_id()));
 
-                modelObservableList = tableListValue.get(newValue);
-                tableBill.setItems(modelObservableList);
-                for (int k = 0 ; k <modelObservableList.size();k++)
-                {
-                    BillingModel billingModel = modelObservableList.get(k);
-                    itemIdList.add(Integer.parseInt(billingModel.getItem_id()));
+                    }
+                    setSubTotal();
 
                 }
-                setSubTotal();
-
 
             }
         });
@@ -190,6 +196,7 @@ public class BillingController implements Initializable, ItemSelectedListener, G
                 billingModel.setAmount(amount);
                 modelObservableList.set(event.getTablePosition().getRow(),billingModel);
                 setSubTotal();
+                sendToMobile();
             }
         });
 
@@ -379,6 +386,7 @@ public class BillingController implements Initializable, ItemSelectedListener, G
                 itemIdList.add(Integer.parseInt(selectedItem.getShort_code()));
                 setSubTotal();
             }
+            sendToMobile();
 
             txtFieldId.clear();
             txtFieldName.clear();
@@ -477,7 +485,7 @@ public class BillingController implements Initializable, ItemSelectedListener, G
             txtFileldGross.setText(String.valueOf(totalAmount));
             double fromGst = Double.valueOf(txtGstPercent.getText().replace("%",""));
             double getGst = fromGst/100;
-            getGst = getGst * totalAmount ;
+            getGst = getGst * totalAmount;
             txtTotal.setText(String.valueOf(getGst + totalAmount));
             roundValue();
         }
@@ -528,6 +536,7 @@ public class BillingController implements Initializable, ItemSelectedListener, G
 
             itemIdList.remove(itemIdList.indexOf(itemIdDelete));
             changeSNo();
+            sendToMobile();
         } else  {
             alert.close();
 
@@ -785,49 +794,134 @@ public class BillingController implements Initializable, ItemSelectedListener, G
 
     @Override
     public void getFromServer(String body) {
-        System.out.print("from server---->"+body);
         try {
             JSONObject itemList = new JSONObject(body);
-           if (itemList.has("table"))
-           {
-               String table = itemList.getString("table");
-              if (!tableList.contains(table))
-               {
-                   tableList.add(table);
-                   listTableList.setItems(tableList);
-                   if (itemList.has("Item_list"))
-                   {
-                       JSONArray itemListArray = itemList.getJSONArray("Item_list");
-                       for (int j=0;j<itemListArray.length();j++)
-                       {
-                           JSONObject item = itemListArray.getJSONObject(j);
-                           serialNo = serialNo  + j;
-                           String item_name = item.getString("item_name");
-                           String qty = item.getString("qty");
-                           String rate = item.getString("price");
-                           String shortCode = item.getString("short_code");
-                           double amt = Double.valueOf(qty);
-                           double price = Double.valueOf(rate);
-                           amt = amt * price;
-                           String amount = String.valueOf(amt);
-                           BillingModel billingModel = new BillingModel(serialNo,item_name,qty,rate,amount,shortCode);
-                           modelObservableList.add(billingModel);
+            if (itemList.has("table"))
+            {
+                String table = itemList.getString("table");
+                if (!tableList.contains(table))
+                {
+                    tableList.add(table);
+                    listTableList.setItems(tableList);
+                    if (itemList.getString("from").equals("mobile")) {
+                        if (itemList.has("Item_list")) {
+                            JSONArray itemListArray = itemList.getJSONArray("Item_list");
+                            for (int j = 0; j < itemListArray.length(); j++) {
+                                JSONObject item = itemListArray.getJSONObject(j);
+                                serialNo = serialNo + j;
+                                String item_name = item.getString("item_name");
+                                String qty = item.getString("qty");
+                                String rate = item.getString("price");
+                                String shortCode = item.getString("short_code");
+                                double amt = Double.valueOf(qty);
+                                double price = Double.valueOf(rate);
+                                amt = amt * price;
+                                String amount = String.valueOf(amt);
+                                BillingModel billingModel = new BillingModel(serialNo, item_name, qty, rate, amount, shortCode);
+                                modelObservableList.add(billingModel);
 
 
                   /* tableBill.setItems(modelObservableList);
                    itemIdList.add(Integer.parseInt(selectedItem.getShort_code()));
                    setSubTotal();  */
-                       }
-                       tableListValue.put(table,modelObservableList);
-                   }
+                            }
+                            tableListValue.put(table, modelObservableList);
+                        }
+                    }
 
-               }
-           }
+                }
+            }
 
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void Networkchanged(boolean isConnected) {
+//        System.out.println("network check---------->"+isConnected);
+    }
+
+    public void sendToMobile()
+    {
+        ObservableList<BillingModel> tempModelList = modelObservableList;
+        ArrayList<ItemListRequestAndResponseModel.item_list> item_lists = billingItemDetails;
+        String message;
+        JSONObject json = new JSONObject();
+        try {
+        json.put("table", "table1");
+        json.put("from", "Desktop");
+        JSONArray itemArray = new JSONArray();
+     for (int i= 0; i< tempModelList.size();i++)
+     {
+         BillingModel billingModel = tempModelList.get(i);
+         for (int j=0 ; j < item_lists.size() ; j++)
+         {
+             ItemListRequestAndResponseModel.item_list item_list = item_lists.get(j);
+             if (billingModel.getItem_id().equals(item_list.getShort_code()))
+             {
+                 JSONObject item = new JSONObject();
+                 item.put("item_name",item_list.getItem_name());
+                 item.put("qty",billingModel.getQuantity());
+                 item.put("item_id",item_list.getItem_id());
+                 item.put("price",billingModel.getRate());
+                 item.put("short_code",item_list.getShort_code());
+                 item.put("des",item_list.getDescription());
+                 item.put("image", Constants.ITEM_BASE_URL + item_list.getImage());
+                 itemArray.put(item);
+             }
+         }
+     }
+            json.put("Item_list", itemArray);
+
+            message = json.toString();
+            sendMsg(message);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+      /*  String message;
+        JSONObject json = new JSONObject();
+        try {
+
+            for (int i=0;i<modelObservableList.size();i++)
+            {
+                BillingModel  item_list = modelObservableList.get(i);
+                JSONObject item = new JSONObject();
+                item.put("item_name",item_list.getItem_name());
+                item.put("qty",item_list.getQuantity());
+                item.put("item_id",item_list.getItem_id());
+                item.put("price",item_list.getRate());
+                item.put("short_code",item_list.getItem_id());
+                itemArray.put(item);
+            }
+            json.put("Item_list", itemArray);
+
+            message = json.toString();
+
+            sendMsg(message);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }*/
+    }
+
+    public void sendMsg(String msg) {
+
+        HashMap headers = new HashMap();
+        headers.put("content-type", "text/plain");
+        if (RabbitmqServer.client!= null) {
+            RabbitmqServer.client.send("/topic/resturantApp", msg, headers);
+            RabbitmqServer.client.addErrorListener(new Listener() {
+
+                @Override
+                public void message(Map headers, String body) {
+
+                }
+            });
+        }else
+        {
+        }
     }
 }

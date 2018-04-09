@@ -48,7 +48,7 @@ public class RabbitmqServer extends AsyncTask {
                         fromServerListener.getFromServer(body);
                     }
 
-                    Platform.runLater(new Runnable() {
+                 /*   Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
                             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -63,7 +63,7 @@ public class RabbitmqServer extends AsyncTask {
                                 // ... user chose CANCEL or closed the dialog
                             }
                         }
-                    });
+                    });*/
 
                 }
             });
@@ -90,4 +90,6 @@ public class RabbitmqServer extends AsyncTask {
     public void progressCallback(Object[] params) {
 
     }
+
+
 }

@@ -23,7 +23,7 @@
                <children>
                   <ImageView fitHeight="94.0" fitWidth="250.0" layoutX="495.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/../images/prawncrablogo.png" />
+                        <Image url="@../images/prawncrablogo.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="94.0" fitWidth="142.0" layoutX="68.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
@@ -47,13 +47,29 @@
                         <Image url="@../images/notification.png" />
                      </image>
                   </ImageView>
+                  <ImageView fitHeight="30.0" fitWidth="87.0" layoutX="1051.0" layoutY="114.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/refres.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="30.0" fitWidth="111.0" layoutX="1235.0" layoutY="113.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/offline.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="30.0" fitWidth="87.0" layoutX="1144.0" layoutY="113.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/history00.png" />
+                     </image>
+                  </ImageView>
+                  <ProgressIndicator fx:id="itemLoadProgres" layoutX="971.0" layoutY="94.0" progress="0.0" />
                </children>
             </AnchorPane>
          </children>
       </StackPane>
       <AnchorPane layoutY="123.0" prefHeight="448.0" prefWidth="199.0" style="-fx-background-color: red;" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="150.0">
          <children>
-            <ListView fx:id="listTableList" editable="true" prefHeight="271.0" prefWidth="199.0" AnchorPane.bottomAnchor="254.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <ListView fx:id="listTableList" editable="true" layoutY="25.0" prefHeight="500.0" prefWidth="199.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="609.0" layoutY="135.0" prefHeight="529.0" prefWidth="322.0" AnchorPane.bottomAnchor="25.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="150.0">
@@ -137,11 +153,6 @@
                         <Font name="Times New Roman Bold" size="18.0" />
                      </font>
                   </Label>
-                  <TextField layoutX="165.0" layoutY="300.0" prefHeight="25.0" prefWidth="127.0" />
-                  <TextField fx:id="txtTotalAmount" editable="false" layoutX="165.0" layoutY="4.0" prefHeight="25.0" prefWidth="127.0" text="0.0">
-                     <font>
-                        <Font name="Times New Roman Bold" size="13.0" />
-                     </font></TextField>
                   <TextField fx:id="txtFiledDiscountAmount" layoutX="165.0" layoutY="47.0" prefHeight="25.0" prefWidth="127.0" />
                   <TextField fx:id="txtFileldGross" layoutX="166.0" layoutY="86.0" prefHeight="25.0" prefWidth="127.0" />
                   <TextField fx:id="txtGstPercent" layoutX="166.0" layoutY="126.0" prefHeight="25.0" prefWidth="127.0" />
@@ -160,18 +171,19 @@
                         <Font name="Times New Roman Bold" size="18.0" />
                      </font>
                   </Label>
+                  <TextField fx:id="txtTotalAmount" layoutX="166.0" layoutY="15.0" prefHeight="25.0" prefWidth="127.0" />
                </children>
             </AnchorPane>
          </children>
       </AnchorPane>
       <TableView fx:id="tableBill" layoutX="205.0" layoutY="206.0" prefHeight="473.0" prefWidth="681.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="210.0" AnchorPane.rightAnchor="328.0" AnchorPane.topAnchor="206.0">
-        <columns>
-          <TableColumn fx:id="colSno" prefWidth="91.0" text="Sno" />
-          <TableColumn fx:id="colItem" prefWidth="97.0" text="Item " />
+         <columns>
+            <TableColumn fx:id="colSno" prefWidth="91.0" text="Sno" />
+            <TableColumn fx:id="colItem" prefWidth="97.0" text="Item " />
             <TableColumn fx:id="colQty" prefWidth="111.0" text="Quantity" />
             <TableColumn fx:id="colRate" prefWidth="70.0" text="Rate" />
             <TableColumn fx:id="colAmount" prefWidth="56.0" text="Amount" />
-        </columns>
+         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
@@ -183,14 +195,8 @@
                   <Font name="Times New Roman Bold" size="14.0" />
                </font>
             </Label>
-            <AutoCompleteTextField fx:id="txtFieldId" layoutX="66.0" layoutY="13.0" prefHeight="26.0" prefWidth="87.0" style="-fx-background-radius: 0px; -fx-background-color: white;">
-               <font>
-                  <Font name="Times New Roman Bold" size="13.0" />
-               </font></AutoCompleteTextField>
-            <TextField fx:id="txtQty" layoutX="525.0" layoutY="14.0" prefHeight="26.0" prefWidth="39.0" style="-fx-background-color: white; -fx-background-radius: none;">
-               <font>
-                  <Font name="Times New Roman Bold" size="13.0" />
-               </font></TextField>
+            <AutoCompleteTextField fx:id="txtFieldId" layoutX="66.0" layoutY="13.0" prefHeight="26.0" prefWidth="87.0" style="-fx-background-radius: 0px; -fx-background-color: white;" />
+            <TextField fx:id="txtQty" layoutX="525.0" layoutY="14.0" prefHeight="26.0" prefWidth="39.0" style="-fx-background-color: white; -fx-background-radius: none;" />
             <Label layoutX="481.0" layoutY="20.0" text="Qnty :" textFill="WHITE">
                <font>
                   <Font name="Times New Roman Bold" size="14.0" />
@@ -216,10 +222,7 @@
                   <Font name="Times New Roman Bold" size="14.0" />
                </font>
             </Label>
-            <AutoCompleteTextField fx:id="txtFieldName" layoutX="274.0" layoutY="15.0" onKeyPressed="#textFiledNamePressed" prefHeight="26.0" prefWidth="167.0" style="-fx-background-color: white; -fx-background-radius: none;">
-               <font>
-                  <Font name="Times New Roman Bold" size="13.0" />
-               </font></AutoCompleteTextField>
+            <AutoCompleteTextField fx:id="txtFieldName" layoutX="274.0" layoutY="15.0" prefHeight="26.0" prefWidth="167.0" style="-fx-background-color: white; -fx-background-radius: none;" />
             <ImageView fitHeight="26.0" fitWidth="37.0" layoutX="443.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/searchicon.png" />
@@ -227,6 +230,14 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <ProgressIndicator fx:id="itemLoadProgres" layoutX="1223.0" layoutY="103.0" progress="0.0" />
+      <AnchorPane layoutX="5.0" layoutY="150.0" prefHeight="26.0" prefWidth="199.0" style="-fx-background-color: #f58220; -fx-border-color: #fff;">
+         <children>
+            <Label layoutX="72.0" layoutY="5.0" text="Tables" textFill="WHITE">
+               <font>
+                  <Font name="Times New Roman Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
