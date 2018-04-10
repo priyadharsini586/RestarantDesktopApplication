@@ -144,9 +144,10 @@ public class BillingController implements Initializable, ItemSelectedListener, G
                     selectedTable = newValue;
                     modelObservableList = tableListValue.get(newValue);
                     tableBill.setItems(modelObservableList);
+                    itemIdList = new ArrayList<>();
                     for (int k = 0; k < modelObservableList.size(); k++) {
                         BillingModel billingModel = modelObservableList.get(k);
-                        itemIdList.add(Integer.parseInt(billingModel.getItem_id()));
+                            itemIdList.add(Integer.parseInt(billingModel.getItem_id()));
 
                     }
                     setSubTotal();
@@ -196,7 +197,7 @@ public class BillingController implements Initializable, ItemSelectedListener, G
                 billingModel.setAmount(amount);
                 modelObservableList.set(event.getTablePosition().getRow(),billingModel);
                 setSubTotal();
-                sendToMobile();
+                sendToMobile(selectedTable);
             }
         });
 
@@ -336,60 +337,59 @@ public class BillingController implements Initializable, ItemSelectedListener, G
 
 
     public void btnAddItem(MouseEvent mouseEvent) {
+        Platform.runLater(new Runnable(){
 
-        if (selectedItem != null)
-        {
+            @Override
+            public void run() {
+                if (selectedItem != null) {
 
-            if (itemIdList.size() != 0)
-            {
-                int itemId = Integer.parseInt(selectedItem.getShort_code());
-                System.out.println(itemId);
-                if (itemIdList.contains(itemId))
-                {
-                    System.out.println("yes");
-                    for (int j=0 ; j <modelObservableList.size() ;j++) {
-                        BillingModel billingModelList = modelObservableList.get(j);
-                        if (billingModelList.getItem_id().equals(selectedItem.getShort_code())) {
-                            int alreadyValue = Integer.parseInt(billingModelList.getQuantity());
-                            int newQty = Integer.parseInt(txtQty.getText());
-                            newQty = newQty + alreadyValue;
-                            double amt = Double.valueOf(newQty);
+                    if (itemIdList.size() != 0) {
+                        int itemId = Integer.parseInt(selectedItem.getShort_code());
+                        System.out.println(itemId);
+                        if (itemIdList.contains(itemId)) {
+                            System.out.println("yes");
+                            for (int j = 0; j < modelObservableList.size(); j++) {
+                                BillingModel billingModelList = modelObservableList.get(j);
+                                if (billingModelList.getItem_id().equals(selectedItem.getShort_code())) {
+                                    int alreadyValue = Integer.parseInt(billingModelList.getQuantity());
+                                    int newQty = Integer.parseInt(txtQty.getText());
+                                    newQty = newQty + alreadyValue;
+                                    double amt = Double.valueOf(newQty);
+                                    double price = Double.valueOf(selectedItem.getPrice());
+                                    amt = amt * price;
+                                    String amount = String.valueOf(amt);
+                                    serialNo = billingModelList.getS_no();
+                                    BillingModel billingModel = new BillingModel(serialNo, selectedItem.getItem_name(), String.valueOf(newQty), selectedItem.getPrice(), amount, selectedItem.getShort_code());
+                                    modelObservableList.set(j, billingModel);
+                                    setSubTotal();
+                                }
+                            }
+                        } else {
+                            double amt = Double.valueOf(txtQty.getText());
                             double price = Double.valueOf(selectedItem.getPrice());
                             amt = amt * price;
                             String amount = String.valueOf(amt);
-                            serialNo = billingModelList.getS_no();
-                            BillingModel billingModel = new BillingModel(serialNo, selectedItem.getItem_name(), String.valueOf(newQty), selectedItem.getPrice(), amount, selectedItem.getShort_code());
-                            modelObservableList.set(j, billingModel);
+                            BillingModel billingModel = new BillingModel(serialNo, selectedItem.getItem_name(), txtQty.getText(), selectedItem.getPrice(), amount, selectedItem.getShort_code());
+                            modelObservableList.add(billingModel);
+                            tableBill.setItems(modelObservableList);
+                            itemIdList.add(Integer.parseInt(selectedItem.getShort_code()));
                             setSubTotal();
                         }
+                    } else {
+                        double amt = Double.valueOf(txtQty.getText());
+                        double price = Double.valueOf(selectedItem.getPrice());
+                        amt = amt * price;
+                        String amount = String.valueOf(amt);
+                        BillingModel billingModel = new BillingModel(serialNo, selectedItem.getItem_name(), txtQty.getText(), selectedItem.getPrice(), amount, selectedItem.getShort_code());
+                        modelObservableList.add(billingModel);
+                        tableBill.setItems(modelObservableList);
+                        itemIdList.add(Integer.parseInt(selectedItem.getShort_code()));
+                        setSubTotal();
                     }
-                }else
-                {
-                    double amt = Double.valueOf(txtQty.getText());
-                    double price = Double.valueOf(selectedItem.getPrice());
-                    amt = amt * price;
-                    String amount = String.valueOf(amt);
-                    BillingModel billingModel = new BillingModel(serialNo, selectedItem.getItem_name(), txtQty.getText(), selectedItem.getPrice(), amount, selectedItem.getShort_code());
-                    modelObservableList.add(billingModel);
-                    tableBill.setItems(modelObservableList);
-                    itemIdList.add(Integer.parseInt(selectedItem.getShort_code()));
-                    setSubTotal();
-                }
-            }else {
-                double amt = Double.valueOf(txtQty.getText());
-                double price = Double.valueOf(selectedItem.getPrice());
-                amt = amt * price;
-                String amount = String.valueOf(amt);
-                BillingModel billingModel = new BillingModel(serialNo, selectedItem.getItem_name(), txtQty.getText(), selectedItem.getPrice(), amount, selectedItem.getShort_code());
-                modelObservableList.add(billingModel);
-                tableBill.setItems(modelObservableList);
-                itemIdList.add(Integer.parseInt(selectedItem.getShort_code()));
-                setSubTotal();
-            }
-            sendToMobile();
+                    sendToMobile(selectedTable);
 
-            txtFieldId.clear();
-            txtFieldName.clear();
+                    txtFieldId.clear();
+                    txtFieldName.clear();
 
 
            /* if (modelObservableList.size() != 0) {
@@ -432,10 +432,11 @@ public class BillingController implements Initializable, ItemSelectedListener, G
                 setSubTotal();
             }*/
 
-        }
+                }
 
-        serialNo++;
-
+                serialNo++;
+            }
+        });
 
     }
 
@@ -536,7 +537,7 @@ public class BillingController implements Initializable, ItemSelectedListener, G
 
             itemIdList.remove(itemIdList.indexOf(itemIdDelete));
             changeSNo();
-            sendToMobile();
+            sendToMobile(selectedTable);
         } else  {
             alert.close();
 
@@ -799,38 +800,107 @@ public class BillingController implements Initializable, ItemSelectedListener, G
             if (itemList.has("table"))
             {
                 String table = itemList.getString("table");
+
                 if (!tableList.contains(table))
                 {
-                    tableList.add(table);
+                    Platform.runLater(new Runnable(){
+
+                        @Override
+                        public void run() {
+                            tableList.add(table);
+                    modelObservableList =  FXCollections.observableArrayList();
+                    itemIdList = new ArrayList<>();
                     listTableList.setItems(tableList);
-                    if (itemList.getString("from").equals("mobile")) {
-                        if (itemList.has("Item_list")) {
-                            JSONArray itemListArray = itemList.getJSONArray("Item_list");
-                            for (int j = 0; j < itemListArray.length(); j++) {
-                                JSONObject item = itemListArray.getJSONObject(j);
-                                serialNo = serialNo + j;
-                                String item_name = item.getString("item_name");
-                                String qty = item.getString("qty");
-                                String rate = item.getString("price");
-                                String shortCode = item.getString("short_code");
-                                double amt = Double.valueOf(qty);
-                                double price = Double.valueOf(rate);
-                                amt = amt * price;
-                                String amount = String.valueOf(amt);
-                                BillingModel billingModel = new BillingModel(serialNo, item_name, qty, rate, amount, shortCode);
-                                modelObservableList.add(billingModel);
+                            try {
+                                if (itemList.getString("from").equals("mobile")) {
+                                    System.out.println(body);
+                                    if (itemList.has("Item_list")) {
+                                        JSONArray itemListArray = itemList.getJSONArray("Item_list");
+                                        for (int j = 0; j < itemListArray.length(); j++) {
+                                            JSONObject item = itemListArray.getJSONObject(j);
+                                            serialNo = serialNo + j;
+                                            String item_name = item.getString("item_name");
+                                            String qty = item.getString("qty");
+                                            String rate = item.getString("price");
+                                            String shortCode = item.getString("short_code");
+                                            double amt = Double.valueOf(qty);
+                                            double price = Double.valueOf(rate);
+                                            amt = amt * price;
+                                            String amount = String.valueOf(amt);
+                                            BillingModel billingModel = new BillingModel(serialNo, item_name, qty, rate, amount, shortCode);
+                                            modelObservableList.add(billingModel);
+                                            /*Platform.runLater(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    if (selectedTable.equals(table))
+                                                    {
+                                                        tableBill.getItems().clear();
+                                                        tableBill.setItems(modelObservableList);
+                                                        tableBill.refresh();
+                                                    }
+                                                }
+                                            });*/
 
 
-                  /* tableBill.setItems(modelObservableList);
-                   itemIdList.add(Integer.parseInt(selectedItem.getShort_code()));
-                   setSubTotal();  */
+                              /* tableBill.setItems(modelObservableList);
+                               itemIdList.add(Integer.parseInt(selectedItem.getShort_code()));
+                               setSubTotal();  */
+                                        }
+                                        tableListValue.put(table, modelObservableList);
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                            tableListValue.put(table, modelObservableList);
                         }
-                    }
+                    });
 
-                }
-            }
+                }else //already contains a table
+                {
+                    Platform.runLater(new Runnable(){
+
+                        @Override
+                        public void run() {
+                            tableListValue.remove(table);
+                            modelObservableList = FXCollections.observableArrayList();
+                            try {
+                                if (itemList.getString("from").equals("mobile")) {
+                                    System.out.println(body);
+                                    if (itemList.has("Item_list")) {
+                                        JSONArray itemListArray = itemList.getJSONArray("Item_list");
+                                        for (int j = 0; j < itemListArray.length(); j++) {
+                                            JSONObject item = itemListArray.getJSONObject(j);
+                                            serialNo = serialNo + j;
+                                            String item_name = item.getString("item_name");
+                                            String qty = item.getString("qty");
+                                            String rate = item.getString("price");
+                                            String shortCode = item.getString("short_code");
+                                            double amt = Double.valueOf(qty);
+                                            double price = Double.valueOf(rate);
+                                            amt = amt * price;
+                                            String amount = String.valueOf(amt);
+                                            BillingModel billingModel = new BillingModel(serialNo, item_name, qty, rate, amount, shortCode);
+                                            modelObservableList.add(billingModel);
+                                        }
+                                        tableListValue.put(table, modelObservableList);
+                                        if (selectedTable.equals(table))
+                                        {
+                                            tableBill.getItems().clear();
+                                            tableBill.setItems(modelObservableList);
+                                            tableBill.refresh();
+                                            setSubTotal();
+                                        }
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+
+                    });
+                    
+                }}
 
 
         } catch (JSONException e) {
@@ -844,14 +914,15 @@ public class BillingController implements Initializable, ItemSelectedListener, G
 //        System.out.println("network check---------->"+isConnected);
     }
 
-    public void sendToMobile()
+    public void sendToMobile(String selectedTable)
     {
         ObservableList<BillingModel> tempModelList = modelObservableList;
+        System.out.println("item  size----->"+modelObservableList.size());
         ArrayList<ItemListRequestAndResponseModel.item_list> item_lists = billingItemDetails;
         String message;
         JSONObject json = new JSONObject();
         try {
-        json.put("table", "table1");
+        json.put("table", selectedTable);
         json.put("from", "Desktop");
         JSONArray itemArray = new JSONArray();
      for (int i= 0; i< tempModelList.size();i++)

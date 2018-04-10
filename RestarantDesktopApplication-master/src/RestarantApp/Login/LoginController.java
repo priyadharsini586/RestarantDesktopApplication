@@ -5,6 +5,7 @@ import RestarantApp.Network.Api;
 import RestarantApp.Network.NetworkClient;
 import RestarantApp.chat.rabbitmq_server.RabbitmqServer;
 import RestarantApp.chat.rabbitmq_stomp.Listener;
+import RestarantApp.database.SqliteConnection;
 import RestarantApp.model.Constants;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -29,6 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +50,8 @@ public class LoginController {
     @FXML
     BorderPane rootPane;
     private NetworkClient networkClient;
+    Connection connection;
+    SqliteConnection sqliteConnection;
     public void initialize() {
         networkClient = new NetworkClient();
         progressLoginIndicator.setVisible(false);
@@ -59,8 +63,16 @@ public class LoginController {
             }
         });
 
-
-
+        connection = SqliteConnection.connector();
+        if (connection == null)
+        {
+            System.out.println("Connection not successfull");
+        }else
+        {
+            System.out.println("Connection  successfull");
+            sqliteConnection = new SqliteConnection();
+            sqliteConnection.createNewTable();
+        }
 
     }
     public void onLoginButtonClick(ActionEvent actionEvent) throws IOException {
